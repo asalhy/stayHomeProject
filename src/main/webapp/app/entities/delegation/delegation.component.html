@@ -1,0 +1,47 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="stayHomeApp.delegation.home.title">Delegations</span>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="delegations?.length === 0">
+        <span jhiTranslate="stayHomeApp.delegation.home.notFound">No delegations found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="delegations?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.delegation.name">Name</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.delegation.gouvernorat">Gouvernorat</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let delegation of delegations ;trackBy: trackId">
+                    <td><a [routerLink]="['/delegation', delegation.id, 'view']">{{ delegation.id }}</a></td>
+                    <td>{{ delegation.name }}</td>
+                    <td>
+                        <div *ngIf="delegation.gouvernoratId">
+                            <a [routerLink]="['/gouvernorat', delegation.gouvernoratId , 'view']" >{{ delegation.gouvernoratName }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/delegation', delegation.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

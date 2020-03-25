@@ -1,0 +1,35 @@
+{
+    "name": "Municipality",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "delegation",
+            "otherEntityRelationshipName": "municipality",
+            "relationshipName": "delegation",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200325022100",
+    "entityTableName": "municipalities",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": true,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}

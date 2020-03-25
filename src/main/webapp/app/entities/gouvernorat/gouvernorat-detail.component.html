@@ -1,0 +1,24 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="gouvernorat">
+            <h2><span jhiTranslate="stayHomeApp.gouvernorat.detail.title">Gouvernorat</span> {{ gouvernorat.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stayHomeApp.gouvernorat.name">Name</span></dt>
+                <dd>
+                    <span>{{ gouvernorat.name }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+        </div>
+    </div>
+</div>

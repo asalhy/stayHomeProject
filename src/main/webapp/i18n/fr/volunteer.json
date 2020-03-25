@@ -1,0 +1,28 @@
+{
+  "stayHomeApp": {
+    "volunteer": {
+      "home": {
+        "title": "Volunteers",
+        "createLabel": "Créer un nouveau Volunteer",
+        "createOrEditLabel": "Créer ou éditer un Volunteer",
+        "notFound": "Aucun Volunteer trouvé"
+      },
+      "created": "Un nouveau Volunteer a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Volunteer avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Volunteer avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Volunteer {{ id }} ?"
+      },
+      "detail": {
+        "title": "Volunteer"
+      },
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "creationDate": "Creation Date",
+      "serviceTypes": "Service Types",
+      "municipality": "Municipality"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="stayHomeApp.gouvernorat.home.title">Gouvernorats</span>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="gouvernorats?.length === 0">
+        <span jhiTranslate="stayHomeApp.gouvernorat.home.notFound">No gouvernorats found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="gouvernorats?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.gouvernorat.name">Name</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let gouvernorat of gouvernorats ;trackBy: trackId">
+                    <td><a [routerLink]="['/gouvernorat', gouvernorat.id, 'view']">{{ gouvernorat.id }}</a></td>
+                    <td>{{ gouvernorat.name }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/gouvernorat', gouvernorat.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+{
+    "name": "Volunteer",
+    "fields": [
+        {
+            "fieldName": "firstName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "serviceType",
+            "otherEntityRelationshipName": "volunteer",
+            "relationshipName": "serviceTypes"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "municipality",
+            "otherEntityRelationshipName": "volunteer",
+            "relationshipName": "municipality",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20200325021800",
+    "entityTableName": "volunteers",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}
