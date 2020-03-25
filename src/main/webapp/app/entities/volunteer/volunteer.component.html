@@ -2,7 +2,7 @@
     <h2 id="page-heading">
         <span jhiTranslate="stayHomeApp.volunteer.home.title">Volunteers</span>
 
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-volunteer" [routerLink]="['/volunteer/new']">
+        <button *ngIf="accountService.isAuthenticated()" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-volunteer" [routerLink]="['/volunteer/new']">
             <fa-icon icon="plus"></fa-icon>
             <span  jhiTranslate="stayHomeApp.volunteer.home.createLabel">
             Create a new Volunteer
@@ -29,7 +29,7 @@
                     <th scope="col"  jhiSortBy="phone"><span jhiTranslate="stayHomeApp.volunteer.phone">Phone</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="creationDate"><span jhiTranslate="stayHomeApp.volunteer.creationDate">Creation Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <th scope="col"  jhiSortBy="municipalityName"><span jhiTranslate="stayHomeApp.volunteer.municipality">Municipality</span> <fa-icon icon="sort"></fa-icon></th>
-                    <th scope="col"></th>
+                    <th scope="col" *ngIf="accountService.isAuthenticated()"></th>
                 </tr>
             </thead>
             <tbody>
@@ -45,7 +45,7 @@
                             <a [routerLink]="['/municipality', volunteer.municipalityId , 'view']" >{{ volunteer.municipalityName }}</a>
                         </div>
                     </td>
-                    <td class="text-right">
+                    <td class="text-right" *ngIf="accountService.isAuthenticated()">
                         <div class="btn-group">
                             <button type="submit"
                                     [routerLink]="['/volunteer', volunteer.id, 'view']"

@@ -10,6 +10,7 @@ import { IVolunteer } from 'app/shared/model/volunteer.model';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { VolunteerService } from './volunteer.service';
 import { VolunteerDeleteDialogComponent } from './volunteer-delete-dialog.component';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-volunteer',
@@ -30,7 +31,8 @@ export class VolunteerComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    public accountService: AccountService
   ) {}
 
   loadPage(page?: number): void {

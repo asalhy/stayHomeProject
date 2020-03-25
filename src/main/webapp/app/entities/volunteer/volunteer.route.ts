@@ -43,7 +43,7 @@ export const volunteerRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [],
       defaultSort: 'id,asc',
       pageTitle: 'stayHomeApp.volunteer.home.title'
     },

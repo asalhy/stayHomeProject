@@ -21,3 +21,24 @@ Main page styles
     background-size: contain;
   }
 }
+
+.governorateStyle {
+  cursor: pointer;
+  fill-rule: nonzero;
+  fill: rgb(48.627451%, 48.627451%, 48.627451%);
+  fill-opacity: 1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: rgb(100%, 100%, 100%);
+  stroke-opacity: 1;
+  stroke-miterlimit: 4;
+}
+
+.governorateStyle:hover {
+  fill: rgb(36, 124, 90);
+}
+
+*:focus {
+  outline: 0 !important;
+}
