@@ -1,12 +1,10 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -27,10 +25,6 @@ public class ServiceType implements Serializable {
     @NotNull
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @ManyToOne
-    @JsonIgnoreProperties("serviceTypes")
-    private Volunteer volunteer;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -54,18 +48,6 @@ public class ServiceType implements Serializable {
         this.name = name;
     }
 
-    public Volunteer getVolunteer() {
-        return volunteer;
-    }
-
-    public ServiceType volunteer(Volunteer volunteer) {
-        this.volunteer = volunteer;
-        return this;
-    }
-
-    public void setVolunteer(Volunteer volunteer) {
-        this.volunteer = volunteer;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -73,15 +55,18 @@ public class ServiceType implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof ServiceType)) {
             return false;
         }
-        return id != null && id.equals(((ServiceType) o).id);
+
+        ServiceType other = (ServiceType) o;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.name);
     }
 
     @Override

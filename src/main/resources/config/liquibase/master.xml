@@ -13,16 +13,11 @@
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
-    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325021800_added_entity_Volunteer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325021900_added_entity_Gouvernorat.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022000_added_entity_Delegation.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022100_added_entity_Municipality.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022200_added_entity_ServiceType.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20200325021800_added_entity_constraints_Volunteer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022000_added_entity_constraints_Delegation.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022100_added_entity_constraints_Municipality.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200325022200_added_entity_constraints_ServiceType.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/01_service.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/02_gouvernorat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/03_delegation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/04_municipality.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/05_user.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/06_volunteer.xml" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>
