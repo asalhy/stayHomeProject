@@ -9,15 +9,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Volunteer} and its DTO {@link VolunteerDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MunicipalityMapper.class})
+@Mapper(componentModel = "spring", uses = {MunicipalityMapper.class, ServiceTypeMapper.class})
 public interface VolunteerMapper extends EntityMapper<VolunteerDTO, Volunteer> {
 
     @Mapping(source = "municipality.id", target = "municipalityId")
     @Mapping(source = "municipality.name", target = "municipalityName")
     VolunteerDTO toDto(Volunteer volunteer);
 
-    @Mapping(target = "serviceTypes", ignore = true)
-    @Mapping(target = "removeServiceTypes", ignore = true)
     @Mapping(source = "municipalityId", target = "municipality")
     Volunteer toEntity(VolunteerDTO volunteerDTO);
 

@@ -1,6 +1,5 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,9 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -47,12 +46,17 @@ public class Volunteer implements Serializable {
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "volunteer")
+    @ManyToMany
+    @JoinTable(
+        name = "volunteers_services",
+        joinColumns = @JoinColumn(name = "volunteer_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id")
+    )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ServiceType> serviceTypes = new HashSet<>();
 
+    @NotNull
     @ManyToOne
-    @JsonIgnoreProperties("volunteers")
     private Municipality municipality;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -138,15 +142,13 @@ public class Volunteer implements Serializable {
         return this;
     }
 
-    public Volunteer addServiceTypes(ServiceType serviceType) {
+    public Volunteer addServiceType(ServiceType serviceType) {
         this.serviceTypes.add(serviceType);
-        serviceType.setVolunteer(this);
         return this;
     }
 
-    public Volunteer removeServiceTypes(ServiceType serviceType) {
+    public Volunteer removeServiceType(ServiceType serviceType) {
         this.serviceTypes.remove(serviceType);
-        serviceType.setVolunteer(null);
         return this;
     }
 
@@ -173,15 +175,18 @@ public class Volunteer implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Volunteer)) {
             return false;
         }
-        return id != null && id.equals(((Volunteer) o).id);
+
+        Volunteer other = (Volunteer) o;
+        return Objects.equals(this.email, other.email);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.email);
     }
 
     @Override

@@ -4,12 +4,13 @@ import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.stayhome.domain.Volunteer} entity.
  */
 public class VolunteerDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -27,11 +28,12 @@ public class VolunteerDTO implements Serializable {
     @NotNull
     private LocalDate creationDate;
 
+    private Set<ServiceTypeDTO> serviceTypes;
 
     private Long municipalityId;
 
     private String municipalityName;
-    
+
     public Long getId() {
         return id;
     }
@@ -78,6 +80,14 @@ public class VolunteerDTO implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public void setServiceTypes(Set<ServiceTypeDTO> serviceTypes) {
+        this.serviceTypes = serviceTypes;
+    }
+
+    public Set<ServiceTypeDTO> getServiceTypes() {
+        return serviceTypes;
     }
 
     public Long getMunicipalityId() {

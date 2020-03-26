@@ -55,15 +55,18 @@ public class Gouvernorat implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Gouvernorat)) {
             return false;
         }
-        return id != null && id.equals(((Gouvernorat) o).id);
+
+        Gouvernorat other = (Gouvernorat) o;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.name);
     }
 
     @Override

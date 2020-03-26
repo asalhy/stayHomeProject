@@ -12,11 +12,4 @@ public class ServiceTypeMapperTest {
     public void setUp() {
         serviceTypeMapper = new ServiceTypeMapperImpl();
     }
-
-    @Test
-    public void testEntityFromId() {
-        Long id = 1L;
-        assertThat(serviceTypeMapper.fromId(id).getId()).isEqualTo(id);
-        assertThat(serviceTypeMapper.fromId(null)).isNull();
-    }
 }
