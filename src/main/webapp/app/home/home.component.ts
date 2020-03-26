@@ -6,7 +6,6 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { Router } from '@angular/router';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-home',
