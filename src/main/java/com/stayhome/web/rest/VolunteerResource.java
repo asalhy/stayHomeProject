@@ -91,9 +91,9 @@ public class VolunteerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of volunteers in body.
      */
     @GetMapping("/volunteers")
-    public ResponseEntity<List<VolunteerDTO>> getAllVolunteers(Pageable pageable) {
-        log.debug("REST request to get a page of Volunteers");
-        Page<VolunteerDTO> page = volunteerService.findAll(pageable);
+    public ResponseEntity<List<VolunteerDTO>> getAllVolunteers(@RequestParam(required = false) Long gouvernoratId, Pageable pageable) {
+        log.debug("REST request to get a page of Volunteers, gouvernoratid= {}",gouvernoratId );
+        Page<VolunteerDTO> page = volunteerService.findAll(gouvernoratId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -123,4 +123,5 @@ public class VolunteerResource {
         volunteerService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+    
 }

@@ -1,14 +1,21 @@
 package com.stayhome.service;
 
+import com.stayhome.domain.Gouvernorat;
 import com.stayhome.domain.Volunteer;
+import com.stayhome.repository.DelegationRepository;
+import com.stayhome.repository.GouvernoratRepository;
+import com.stayhome.repository.MunicipalityRepository;
 import com.stayhome.repository.VolunteerRepository;
 import com.stayhome.service.dto.VolunteerDTO;
 import com.stayhome.service.mapper.VolunteerMapper;
+import com.stayhome.web.rest.errors.GouvernoratNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +31,20 @@ public class VolunteerService {
     private final Logger log = LoggerFactory.getLogger(VolunteerService.class);
 
     private final VolunteerRepository volunteerRepository;
+    private final GouvernoratRepository gouvernoratRepository;
+    private final DelegationRepository delegationRepository;
+    private final MunicipalityRepository municipalityRepository;
 
     private final VolunteerMapper volunteerMapper;
 
-    public VolunteerService(VolunteerRepository volunteerRepository, VolunteerMapper volunteerMapper) {
+    public VolunteerService(VolunteerRepository volunteerRepository, VolunteerMapper volunteerMapper,GouvernoratRepository gouvernoratRepository
+    		,DelegationRepository delegationRepository,MunicipalityRepository municipalityRepository) {
         this.volunteerRepository = volunteerRepository;
         this.volunteerMapper = volunteerMapper;
-    }
+        this.gouvernoratRepository = gouvernoratRepository;
+        this.delegationRepository = delegationRepository;
+        this.municipalityRepository = municipalityRepository;
+   }
 
     /**
      * Save a volunteer.
@@ -47,15 +61,21 @@ public class VolunteerService {
 
     /**
      * Get all the volunteers.
+     * @param gouvernoratId 
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<VolunteerDTO> findAll(Pageable pageable) {
+    public Page<VolunteerDTO> findAll(Long gouvernoratId, Pageable pageable) {
         log.debug("Request to get all Volunteers");
-        return volunteerRepository.findAll(pageable)
-            .map(volunteerMapper::toDto);
+        Optional<Gouvernorat> gouvernorat = gouvernoratRepository.findById(gouvernoratId);
+        if ( !gouvernorat.isPresent() ) {
+        	throw new GouvernoratNotFoundException();
+        }
+        return  gouvernoratId ==null ?
+        		volunteerRepository.findAll(pageable).map(volunteerMapper::toDto) :
+        		volunteerRepository.findAllByGouvernorat(gouvernoratId, pageable).map(volunteerMapper::toDto);
     }
 
     /**
@@ -80,4 +100,15 @@ public class VolunteerService {
         log.debug("Request to delete Volunteer : {}", id);
         volunteerRepository.deleteById(id);
     }
+
+//    @Transactional(readOnly = true)
+////    @Query("SELECT v FROM Volunteer v,Municipality m,Delegation d WHERE v.municipality_id=m.id and m.delegation_id=d.id and d.gouvernorat_id= ?1 ")
+//    @Query("SELECT v FROM Volunteer v WHERE v.municipality.delegation.gouvernorat.id= ?1 ")
+//	public Page<VolunteerDTO> findWithGouvernorat(Long gouvernoratId, Pageable pageable) {
+//        //log.debug("Request to get all Volunteers");
+//    	
+//        delegationRepository.findby
+//    	return volunteerRepository.findByGouvernorat(gouvernoratId, pageable);
+//	}
+
 }
