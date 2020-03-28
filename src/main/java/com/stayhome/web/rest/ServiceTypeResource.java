@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.ServiceType}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/service-types")
 public class ServiceTypeResource {
 
     private final Logger log = LoggerFactory.getLogger(ServiceTypeResource.class);
@@ -38,7 +38,7 @@ public class ServiceTypeResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceTypes in body.
      */
-    @GetMapping("/service-types")
+    @GetMapping
     public List<ServiceTypeDTO> getAllServiceTypes() {
         log.debug("REST request to get all ServiceTypes");
         return serviceTypeService.findAll();
@@ -50,7 +50,7 @@ public class ServiceTypeResource {
      * @param id the id of the serviceTypeDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the serviceTypeDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/service-types/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ServiceTypeDTO> getServiceType(@PathVariable Long id) {
         log.debug("REST request to get ServiceType : {}", id);
         Optional<ServiceTypeDTO> serviceTypeDTO = serviceTypeService.findOne(id);

@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Gouvernorat}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/gouvernorats")
 public class GouvernoratResource {
 
     private final Logger log = LoggerFactory.getLogger(GouvernoratResource.class);
@@ -38,7 +38,7 @@ public class GouvernoratResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gouvernorats in body.
      */
-    @GetMapping("/gouvernorats")
+    @GetMapping
     public List<GouvernoratDTO> getAllGouvernorats() {
         log.debug("REST request to get all Gouvernorats");
         return gouvernoratService.findAll();
@@ -50,7 +50,7 @@ public class GouvernoratResource {
      * @param id the id of the gouvernoratDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the gouvernoratDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/gouvernorats/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GouvernoratDTO> getGouvernorat(@PathVariable Long id) {
         log.debug("REST request to get Gouvernorat : {}", id);
         Optional<GouvernoratDTO> gouvernoratDTO = gouvernoratService.findOne(id);

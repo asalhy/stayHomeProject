@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Delegation}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/delegations")
 public class DelegationResource {
 
     private final Logger log = LoggerFactory.getLogger(DelegationResource.class);
@@ -38,10 +38,10 @@ public class DelegationResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of delegations in body.
      */
-    @GetMapping("/delegations")
-    public List<DelegationDTO> getAllDelegations() {
-        log.debug("REST request to get all Delegations");
-        return delegationService.findAll();
+    @GetMapping
+    public List<DelegationDTO> getAllDelegations(@RequestParam(name = "gouvernoratId", required = false) Long gouvernoratId) {
+        log.debug("REST request to get all Delegations, gouvernoratId = {}", gouvernoratId);
+        return delegationService.findAll(gouvernoratId);
     }
 
     /**
@@ -50,7 +50,7 @@ public class DelegationResource {
      * @param id the id of the delegationDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the delegationDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/delegations/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DelegationDTO> getDelegation(@PathVariable Long id) {
         log.debug("REST request to get Delegation : {}", id);
         Optional<DelegationDTO> delegationDTO = delegationService.findOne(id);

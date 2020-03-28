@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Municipality}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/municipalities")
 public class MunicipalityResource {
 
     private final Logger log = LoggerFactory.getLogger(MunicipalityResource.class);
@@ -38,10 +38,10 @@ public class MunicipalityResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of municipalities in body.
      */
-    @GetMapping("/municipalities")
-    public List<MunicipalityDTO> getAllMunicipalities() {
-        log.debug("REST request to get all Municipalities");
-        return municipalityService.findAll();
+    @GetMapping
+    public List<MunicipalityDTO> getAllMunicipalities(@RequestParam(name = "delegationId", required = false) Long delegationId) {
+        log.debug("REST request to get all Municipalities, delegationId = {}", delegationId);
+        return municipalityService.findAll(delegationId);
     }
 
     /**
@@ -50,7 +50,7 @@ public class MunicipalityResource {
      * @param id the id of the municipalityDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the municipalityDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/municipalities/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MunicipalityDTO> getMunicipality(@PathVariable Long id) {
         log.debug("REST request to get Municipality : {}", id);
         Optional<MunicipalityDTO> municipalityDTO = municipalityService.findOne(id);

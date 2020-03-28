@@ -1,24 +1,25 @@
-id ;name
-97 ;Kebili
-96 ;Médenine
-108;Tunis
-109;Le Kef
-101;Tozeur
-102;Manubah
-103;Béja
-104;Ben Arous (Tunis Sud)
-105;Bizerte
-120;Zaghouan
-107;Nabeul
-106;Jendouba
-117;Monastir
-116;Mahdia
-115;Siliana
-114;Sfax
-113;Sidi Bou Zid
-112;Gafsa
-111;Gabès
-110;Kassérine
-119;Sousse
-118;Kairouan
-98 ;Tataouine
+id;name
+1;Tunis‎
+2;Ariana
+3;Ben Arous
+4;Mannouba
+5;Zaghouan
+6;Bizerte
+7;Siliana
+8;Kef
+9;Jendouba
+10;Bèja
+11;Nabeul
+12;Sousse
+13;Monastir
+14;Sfax
+15;Mahdia
+16;Kairouan‎
+17;Kasserine
+18;Gafsa
+19;Tozeur
+20;Gabès
+21;Sidi Bouzid
+22;Kébili
+23;Medenine
+24;Tataouine
