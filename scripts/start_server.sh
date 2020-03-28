@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /usr/src/stayHome/stayHomeProject/source
+cd /home/ec2-user/stayHome
 ./mvnw&
 npm start&

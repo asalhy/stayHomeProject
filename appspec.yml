@@ -2,18 +2,18 @@ version: 0.1
 os: linux
 files:
   - source: /source
-    destination: /usr/src/stayHome
+    destination: /home/ec2-user/stayHome
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
     - location: scripts/start_server.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
   ApplicationStop:
     - location: scripts/stop_server.sh
       timeout: 300
-      runas: root
+      runas: ec2-user
 
 
