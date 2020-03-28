@@ -17,7 +17,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false" unique="true" uniqueConstraintName="ux_delegations_name" />
+                <constraints nullable="false"/>
             </column>
             <column name="gouvernorat_id" type="bigint">
                 <constraints nullable="false" />

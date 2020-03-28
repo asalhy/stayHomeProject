@@ -28,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Volunteer}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/volunteers")
 public class VolunteerResource {
 
     private final Logger log = LoggerFactory.getLogger(VolunteerResource.class);
@@ -51,7 +51,7 @@ public class VolunteerResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new volunteerDTO, or with status {@code 400 (Bad Request)} if the volunteer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/volunteers")
+    @PostMapping
     public ResponseEntity<VolunteerDTO> createVolunteer(@Valid @RequestBody VolunteerDTO volunteerDTO) throws URISyntaxException {
         log.debug("REST request to save Volunteer : {}", volunteerDTO);
         if (volunteerDTO.getId() != null) {
@@ -72,7 +72,7 @@ public class VolunteerResource {
      * or with status {@code 500 (Internal Server Error)} if the volunteerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/volunteers")
+    @PutMapping
     public ResponseEntity<VolunteerDTO> updateVolunteer(@Valid @RequestBody VolunteerDTO volunteerDTO) throws URISyntaxException {
         log.debug("REST request to update Volunteer : {}", volunteerDTO);
         if (volunteerDTO.getId() == null) {
@@ -90,10 +90,10 @@ public class VolunteerResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of volunteers in body.
      */
-    @GetMapping("/volunteers")
-    public ResponseEntity<List<VolunteerDTO>> getAllVolunteers(Pageable pageable) {
-        log.debug("REST request to get a page of Volunteers");
-        Page<VolunteerDTO> page = volunteerService.findAll(pageable);
+    @GetMapping
+    public ResponseEntity<List<VolunteerDTO>> getAllVolunteers(@RequestParam(name = "municipalityId", required = false) Long municipalityId, Pageable pageable) {
+        log.debug("REST request to get a page of Volunteers, municipalityId = {}", municipalityId);
+        Page<VolunteerDTO> page = volunteerService.findAll(municipalityId, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -104,7 +104,7 @@ public class VolunteerResource {
      * @param id the id of the volunteerDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the volunteerDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/volunteers/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VolunteerDTO> getVolunteer(@PathVariable Long id) {
         log.debug("REST request to get Volunteer : {}", id);
         Optional<VolunteerDTO> volunteerDTO = volunteerService.findOne(id);
@@ -117,7 +117,7 @@ public class VolunteerResource {
      * @param id the id of the volunteerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/volunteers/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVolunteer(@PathVariable Long id) {
         log.debug("REST request to delete Volunteer : {}", id);
         volunteerService.delete(id);

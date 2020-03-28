@@ -1,9 +1,12 @@
 package com.stayhome.service;
 
 import com.stayhome.domain.Delegation;
+import com.stayhome.domain.Gouvernorat;
 import com.stayhome.repository.DelegationRepository;
+import com.stayhome.repository.GouvernoratRepository;
 import com.stayhome.service.dto.DelegationDTO;
 import com.stayhome.service.mapper.DelegationMapper;
+import com.stayhome.web.rest.errors.GouvernoratNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +28,12 @@ public class DelegationService {
     private final Logger log = LoggerFactory.getLogger(DelegationService.class);
 
     private final DelegationRepository delegationRepository;
-
+    private final GouvernoratRepository gouvernoratRepository;
     private final DelegationMapper delegationMapper;
 
-    public DelegationService(DelegationRepository delegationRepository, DelegationMapper delegationMapper) {
+    public DelegationService(DelegationRepository delegationRepository, GouvernoratRepository gouvernoratRepository, DelegationMapper delegationMapper) {
         this.delegationRepository = delegationRepository;
+        this.gouvernoratRepository = gouvernoratRepository;
         this.delegationMapper = delegationMapper;
     }
 
@@ -52,11 +56,23 @@ public class DelegationService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<DelegationDTO> findAll() {
-        log.debug("Request to get all Delegations");
-        return delegationRepository.findAll().stream()
-            .map(delegationMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+    public List<DelegationDTO> findAll(Long gouvernoratId) {
+        log.debug("Request to get all Delegations, gouvernoratId = {}", gouvernoratId);
+
+        final List<Delegation> delegations;
+
+        if (gouvernoratId != null) {
+            Optional<Gouvernorat> gouvernorat = this.gouvernoratRepository.findById(gouvernoratId);
+            if (!gouvernorat.isPresent()) {
+                throw new GouvernoratNotFoundException(gouvernoratId);
+            }
+
+            delegations = this.delegationRepository.findAllByGouvernorat(gouvernorat.get());
+        } else {
+            delegations = this.delegationRepository.findAll();
+        }
+
+        return this.delegationMapper.toDto(delegations);
     }
 
     /**

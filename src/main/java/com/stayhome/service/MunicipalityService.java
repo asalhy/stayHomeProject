@@ -1,12 +1,16 @@
 package com.stayhome.service;
 
+import com.stayhome.domain.Delegation;
 import com.stayhome.domain.Municipality;
+import com.stayhome.repository.DelegationRepository;
 import com.stayhome.repository.MunicipalityRepository;
 import com.stayhome.service.dto.MunicipalityDTO;
 import com.stayhome.service.mapper.MunicipalityMapper;
+import com.stayhome.web.rest.errors.DelegationNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +29,12 @@ public class MunicipalityService {
     private final Logger log = LoggerFactory.getLogger(MunicipalityService.class);
 
     private final MunicipalityRepository municipalityRepository;
-
+    private final DelegationRepository delegationRepository;
     private final MunicipalityMapper municipalityMapper;
 
-    public MunicipalityService(MunicipalityRepository municipalityRepository, MunicipalityMapper municipalityMapper) {
+    public MunicipalityService(MunicipalityRepository municipalityRepository, DelegationRepository delegationRepository, MunicipalityMapper municipalityMapper) {
         this.municipalityRepository = municipalityRepository;
+        this.delegationRepository = delegationRepository;
         this.municipalityMapper = municipalityMapper;
     }
 
@@ -52,11 +57,22 @@ public class MunicipalityService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<MunicipalityDTO> findAll() {
-        log.debug("Request to get all Municipalities");
-        return municipalityRepository.findAll().stream()
-            .map(municipalityMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+    public List<MunicipalityDTO> findAll(Long delegationId) {
+        log.debug("Request to get all Municipalities, delegationId = {}", delegationId);
+
+        final List<Municipality> municipalities;
+        if (delegationId != null) {
+            Optional<Delegation> delegation = this.delegationRepository.findById(delegationId);
+            if (!delegation.isPresent()) {
+                throw new DelegationNotFoundException(delegationId);
+            }
+
+            municipalities = this.municipalityRepository.findAllByDelegation(delegation.get());
+        } else {
+            municipalities = this.municipalityRepository.findAll();
+        }
+
+        return this.municipalityMapper.toDto(municipalities);
     }
 
     /**
