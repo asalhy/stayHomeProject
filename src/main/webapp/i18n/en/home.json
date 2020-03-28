@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Welcome to stayHome! Looking for a Volunteer ?",
+    "title": "Looking for a Volunteer ?",
     "subtitle": "By the people for the people",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."

@@ -1,26 +1,39 @@
-<div class="row">
-    <div class="col-md-6">
-        <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
-
-        <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
+<div class="row ">
+    <div class="col-md-12 text-center">
+        <h1 class="display-4" jhiTranslate="home.title"></h1>
+        <!-- <p class="lead" jhiTranslate="home.subtitle"></p>-->
     </div>
-    <div class="col-md-6" style="max-height: 80%">
-        <svg fill="#486A47" width="250pt" height="539pt" viewBox="0 0 250 539" version="1.1">
-            <g id="surface1" *ngFor="let elem of regions | keyvalue">
-                <ng-template #tipContent>Check volunteers in {{names[elem.key]}}!</ng-template>
+</div>
+<div class="row" [@animSlider]="currentStep">
+    <div class="col-md-12 text-center" style="max-height: 80%" *ngIf="currentStep === 0">
+        <h1>Select Gouvernorat</h1>
+        <svg fill="#486A47" width="250pt" height="539pt" viewBox="0 0 492 1027" version="1.1">
+            <g id="surface1" *ngFor="let elem of tunisia">
+                <ng-template #tipContent>Check volunteers in {{elem.name}}!</ng-template>
                 <path [ngClass]="'governorateStyle'"
-                      transform="matrix(0.25,0,0,0.249768,0,0)"
-                      [attr.id]="elem.key"
-                      [attr.title]="names[elem.key]"
-                      [attr.d]="elem.value"
-                      (click)="goToVolunteerList(elem.key)"
+                      [attr.id]="elem.id"
+                      [attr.title]="elem.name"
+                      [attr.d]="elem.d"
+                      (click)="goToDelegationList(elem)"
                       [ngbTooltip]="tipContent" container="body"/>
             </g>
         </svg>
     </div>
-</div>
-<style>
-    ngb-tooltip-window {
+    <div class="col-md-12 text-center" *ngIf="currentStep === 1">
+        <h1>{{selectDelegationTitle}}</h1>
+        <ul class="list-group">
+            <li *ngFor="let delegation of delegations" class="list-group-item"
+                (click)="goToMunicipalityList(delegation)">{{delegation.name}}</li>
+        </ul>
+        <button class="btn btn-success" (click)="goBack()">Go back</button>
+    </div>
 
-    }
-</style>
+    <div class="col-md-12 text-center" *ngIf="currentStep === 2">
+        <h1>{{selectMunicipalityTitle}}</h1>
+        <ul class="list-group">
+            <li *ngFor="let municipality of municipalities" class="list-group-item"
+                (click)="goToVolunteerList(municipality)">{{municipality.name}}</li>
+        </ul>
+        <button class="btn btn-success" (click)="goBack()">Go back</button>
+    </div>
+</div>

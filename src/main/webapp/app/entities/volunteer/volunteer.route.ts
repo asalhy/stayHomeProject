@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { JhiResolvePagingParams } from 'ng-jhipster';
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
@@ -12,6 +11,7 @@ import { VolunteerService } from './volunteer.service';
 import { VolunteerComponent } from './volunteer.component';
 import { VolunteerDetailComponent } from './volunteer-detail.component';
 import { VolunteerUpdateComponent } from './volunteer-update.component';
+import { ResolveVolunteersParams } from 'app/entities/volunteer/ResolveVolunteersParams';
 
 @Injectable({ providedIn: 'root' })
 export class VolunteerResolve implements Resolve<IVolunteer> {
@@ -40,7 +40,7 @@ export const volunteerRoute: Routes = [
     path: '',
     component: VolunteerComponent,
     resolve: {
-      pagingParams: JhiResolvePagingParams
+      params: ResolveVolunteersParams
     },
     data: {
       authorities: [],
