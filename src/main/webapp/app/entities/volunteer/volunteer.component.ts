@@ -25,7 +25,7 @@ export class VolunteerComponent implements OnInit, OnDestroy {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
-  municiaplityId = 0;
+  municiaplityId = null;
 
   constructor(
     protected volunteerService: VolunteerService,
@@ -38,32 +38,28 @@ export class VolunteerComponent implements OnInit, OnDestroy {
 
   loadPage(page?: number): void {
     const pageToLoad: number = page || this.page;
-
-    this.volunteerService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-        municipalityId: this.municiaplityId
-      })
-      .subscribe(
-        (res: HttpResponse<IVolunteer[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
-        () => this.onError()
-      );
+    const reqParams = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };
+    if (this.municiaplityId) {
+      reqParams['municipalityId'] = this.municiaplityId;
+    }
+    this.volunteerService.query().subscribe(
+      (res: HttpResponse<IVolunteer[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
+      () => this.onError()
+    );
   }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
-      if (data.params.municipalityId) {
-        this.municiaplityId = data.params.municipalityId;
-        this.page = 0;
-        this.ascending = true;
-        this.predicate = 'id';
-        this.ngbPaginationPage = data.params.page;
-        this.loadPage();
-      } else {
-        this.router.navigate(['/']);
-      }
+      this.municiaplityId = data.params.municipalityId;
+      this.page = 0;
+      this.ascending = true;
+      this.predicate = 'id';
+      this.ngbPaginationPage = data.params.page;
+      this.loadPage();
     });
     this.registerChangeInVolunteers();
   }
