@@ -25,6 +25,7 @@ export class VolunteerComponent implements OnInit, OnDestroy {
   predicate!: string;
   ascending!: boolean;
   ngbPaginationPage = 1;
+  municiaplityId = 0;
 
   constructor(
     protected volunteerService: VolunteerService,
@@ -42,7 +43,8 @@ export class VolunteerComponent implements OnInit, OnDestroy {
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
+        municipalityId: this.municiaplityId
       })
       .subscribe(
         (res: HttpResponse<IVolunteer[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
@@ -52,11 +54,16 @@ export class VolunteerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(data => {
-      this.page = data.pagingParams.page;
-      this.ascending = data.pagingParams.ascending;
-      this.predicate = data.pagingParams.predicate;
-      this.ngbPaginationPage = data.pagingParams.page;
-      this.loadPage();
+      if (data.params.municipalityId) {
+        this.municiaplityId = data.params.municipalityId;
+        this.page = 0;
+        this.ascending = true;
+        this.predicate = 'id';
+        this.ngbPaginationPage = data.params.page;
+        this.loadPage();
+      } else {
+        this.router.navigate(['/']);
+      }
     });
     this.registerChangeInVolunteers();
   }
@@ -94,6 +101,7 @@ export class VolunteerComponent implements OnInit, OnDestroy {
     this.page = page;
     this.router.navigate(['/volunteer'], {
       queryParams: {
+        municipalityId: this.municiaplityId,
         page: this.page,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
@@ -104,5 +112,9 @@ export class VolunteerComponent implements OnInit, OnDestroy {
 
   protected onError(): void {
     this.ngbPaginationPage = this.page;
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
   }
 }
