@@ -46,7 +46,7 @@ export class VolunteerComponent implements OnInit, OnDestroy {
     if (this.municiaplityId) {
       reqParams['municipalityId'] = this.municiaplityId;
     }
-    this.volunteerService.query().subscribe(
+    this.volunteerService.query(reqParams).subscribe(
       (res: HttpResponse<IVolunteer[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
       () => this.onError()
     );

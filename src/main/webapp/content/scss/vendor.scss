@@ -1,5 +1,4 @@
 /* after changing this file run 'npm run webpack:build' */
-
 /***************************
 put Sass variables here:
 eg $input-color: red;
@@ -10,7 +9,7 @@ eg $input-color: red;
 // Import Bootstrap source files from node_modules
 @import '~bootstrap/scss/bootstrap';
 @import '~bootswatch/dist/spacelab/bootswatch';
-
 @import 'src/main/webapp/content/scss/rtl.scss';
-
+@import '~line-awesome/dist/line-awesome/css/line-awesome.min.css';
+@import '~@ng-select/ng-select/themes/default.theme.css';
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
