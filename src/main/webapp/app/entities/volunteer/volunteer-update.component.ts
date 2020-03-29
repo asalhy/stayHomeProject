@@ -9,6 +9,8 @@ import { IVolunteer, Volunteer } from 'app/shared/model/volunteer.model';
 import { VolunteerService } from './volunteer.service';
 import { IMunicipality } from 'app/shared/model/municipality.model';
 import { MunicipalityService } from 'app/entities/municipality/municipality.service';
+import { ServiceTypeService } from 'app/entities/service-type/service-type.service';
+import { IServiceType } from 'app/shared/model/service-type.model';
 
 @Component({
   selector: 'jhi-volunteer-update',
@@ -16,6 +18,8 @@ import { MunicipalityService } from 'app/entities/municipality/municipality.serv
 })
 export class VolunteerUpdateComponent implements OnInit {
   isSaving = false;
+  serviceTypes: IServiceType[] = [];
+  selectedServiceTypes: IServiceType[];
   municipalities: IMunicipality[] = [];
   creationDateDp: any;
 
@@ -25,6 +29,7 @@ export class VolunteerUpdateComponent implements OnInit {
     lastName: [null, [Validators.required]],
     email: [null, [Validators.required]],
     phone: [null, [Validators.required]],
+    serviceTypes: [[], [Validators.required]],
     creationDate: [null, [Validators.required]],
     municipalityId: []
   });
@@ -32,25 +37,30 @@ export class VolunteerUpdateComponent implements OnInit {
   constructor(
     protected volunteerService: VolunteerService,
     protected municipalityService: MunicipalityService,
+    protected serviceTypesService: ServiceTypeService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.selectedServiceTypes = [];
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ volunteer }) => {
       this.updateForm(volunteer);
-
+      this.serviceTypesService.query().subscribe((res: HttpResponse<IServiceType[]>) => (this.serviceTypes = res.body || []));
       this.municipalityService.query().subscribe((res: HttpResponse<IMunicipality[]>) => (this.municipalities = res.body || []));
     });
   }
 
   updateForm(volunteer: IVolunteer): void {
+    this.selectedServiceTypes = volunteer.serviceTypes ? [...volunteer.serviceTypes] : [];
     this.editForm.patchValue({
       id: volunteer.id,
       firstName: volunteer.firstName,
       lastName: volunteer.lastName,
       email: volunteer.email,
       phone: volunteer.phone,
+      serviceTypes: volunteer.serviceTypes,
       creationDate: volunteer.creationDate,
       municipalityId: volunteer.municipalityId
     });
@@ -78,6 +88,7 @@ export class VolunteerUpdateComponent implements OnInit {
       lastName: this.editForm.get(['lastName'])!.value,
       email: this.editForm.get(['email'])!.value,
       phone: this.editForm.get(['phone'])!.value,
+      serviceTypes: this.editForm.get(['serviceTypes'])!.value,
       creationDate: this.editForm.get(['creationDate'])!.value,
       municipalityId: this.editForm.get(['municipalityId'])!.value
     };

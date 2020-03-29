@@ -60,6 +60,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stayHomeApp.volunteer.serviceTypes" for="field_serviceTypes"></label>
+                    <ng-select id="field_serviceTypes" formControlName="serviceTypes"
+                        [items]="serviceTypes"
+                        [closeOnSelect]="true"
+                        [hideSelected]="true"
+                        [multiple]="true"
+                        bindLabel="name"
+                        placeholder="{{'stayHomeApp.volunteer.serviceTypes' | translate}}"
+                        [(ngModel)]="selectedServiceTypes">
+                    </ng-select>
+                    <div *ngIf="editForm.get('serviceTypes')!.invalid && (editForm.get('serviceTypes')!.dirty || editForm.get('serviceTypes')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('serviceTypes')?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="stayHomeApp.volunteer.creationDate" for="field_creationDate">Creation Date</label>
                     <div class="input-group">
                         <input id="field_creationDate" type="text" class="form-control" name="creationDate" ngbDatepicker #creationDateDp="ngbDatepicker" formControlName="creationDate"/>
@@ -77,10 +96,14 @@
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="stayHomeApp.volunteer.municipality" for="field_municipality">Municipality</label>
-                    <select class="form-control" id="field_municipality" name="municipality" formControlName="municipalityId">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="municipalityOption.id" *ngFor="let municipalityOption of municipalities; trackBy: trackById">{{ municipalityOption.name }}</option>
-                    </select>
+                    <ng-select id="field_municipality" formControlName="municipalityId"
+                               [items]="municipalities"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               bindLabel="name"
+                               bindValue="id"
+                               placeholder="{{'stayHomeApp.volunteer.municipality' | translate}}">
+                    </ng-select>
                 </div>
             </div>
 

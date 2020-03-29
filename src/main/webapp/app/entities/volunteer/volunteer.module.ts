@@ -7,9 +7,10 @@ import { VolunteerDetailComponent } from './volunteer-detail.component';
 import { VolunteerUpdateComponent } from './volunteer-update.component';
 import { VolunteerDeleteDialogComponent } from './volunteer-delete-dialog.component';
 import { volunteerRoute } from './volunteer.route';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
-  imports: [StayHomeSharedModule, RouterModule.forChild(volunteerRoute)],
+  imports: [StayHomeSharedModule, RouterModule.forChild(volunteerRoute), NgSelectModule],
   declarations: [VolunteerComponent, VolunteerDetailComponent, VolunteerUpdateComponent, VolunteerDeleteDialogComponent],
   entryComponents: [VolunteerDeleteDialogComponent]
 })
