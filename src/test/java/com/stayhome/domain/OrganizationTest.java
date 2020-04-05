@@ -9,14 +9,18 @@ public class OrganizationTest {
     @Test
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Organization.class);
+
         Organization organization1 = new Organization();
-        organization1.setId(1L);
+        organization1.setName("Scout");
+
         Organization organization2 = new Organization();
-        organization2.setId(organization1.getId());
+        organization2.setName(organization1.getName());
         assertThat(organization1).isEqualTo(organization2);
-        organization2.setId(2L);
+
+        organization2.setName("Admin");
         assertThat(organization1).isNotEqualTo(organization2);
-        organization1.setId(null);
+
+        organization2.setName(null);
         assertThat(organization1).isNotEqualTo(organization2);
     }
 }

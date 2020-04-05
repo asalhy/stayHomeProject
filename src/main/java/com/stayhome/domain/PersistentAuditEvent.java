@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Persist AuditEvent managed by the Spring Boot actuator.
@@ -84,15 +85,18 @@ public class PersistentAuditEvent implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof PersistentAuditEvent)) {
             return false;
         }
-        return id != null && id.equals(((PersistentAuditEvent) o).id);
+
+        PersistentAuditEvent other = (PersistentAuditEvent) o;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.id);
     }
 
     @Override

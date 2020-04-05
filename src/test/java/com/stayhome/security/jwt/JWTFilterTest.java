@@ -1,6 +1,7 @@
 package com.stayhome.security.jwt;
 
 import com.stayhome.security.AuthoritiesConstants;
+import com.stayhome.security.UserPrincipal;
 import io.github.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -41,12 +42,7 @@ public class JWTFilterTest {
 
     @Test
     public void testJWTFilter() throws Exception {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            "test-user",
-            "test-password",
-            Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
-        );
-        String jwt = tokenProvider.createToken(authentication, false);
+        String jwt = tokenProvider.createToken(new UserPrincipal("test-user", 1L, Collections.singleton(AuthoritiesConstants.USER)), false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         request.setRequestURI("/api/test");
@@ -96,12 +92,7 @@ public class JWTFilterTest {
 
     @Test
     public void testJWTFilterWrongScheme() throws Exception {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            "test-user",
-            "test-password",
-            Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
-        );
-        String jwt = tokenProvider.createToken(authentication, false);
+        String jwt = tokenProvider.createToken(new UserPrincipal("test-user", 1L, Collections.singleton(AuthoritiesConstants.USER)), false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
         request.setRequestURI("/api/test");

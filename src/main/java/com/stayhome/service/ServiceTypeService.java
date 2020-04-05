@@ -2,19 +2,17 @@ package com.stayhome.service;
 
 import com.stayhome.domain.Organization;
 import com.stayhome.domain.ServiceType;
+import com.stayhome.exception.OrganizationNotFoundException;
 import com.stayhome.repository.OrganizationRepository;
 import com.stayhome.repository.ServiceTypeRepository;
 import com.stayhome.service.dto.ServiceTypeDTO;
 import com.stayhome.service.mapper.ServiceTypeMapper;
-import com.stayhome.exception.OrganizationNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,15 +67,14 @@ public class ServiceTypeService {
 
             // FIXME - Use graph
             services = organization.get().getServiceTypes();
-        }
-        else{
+        } else {
             services = serviceTypeRepository.findAll();
         }
 
-        // FIXME - Use Mapstruct
-        return services.stream()
-            .map(serviceTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return services
+            .stream()
+            .map(this.serviceTypeMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**

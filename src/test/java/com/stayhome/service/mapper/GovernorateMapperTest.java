@@ -12,11 +12,4 @@ public class GovernorateMapperTest {
     public void setUp() {
         governorateMapper = new GovernorateMapperImpl();
     }
-
-    @Test
-    public void testEntityFromId() {
-        Long id = 1L;
-        assertThat(governorateMapper.fromId(id).getId()).isEqualTo(id);
-        assertThat(governorateMapper.fromId(null)).isNull();
-    }
 }

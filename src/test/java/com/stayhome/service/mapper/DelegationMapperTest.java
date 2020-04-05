@@ -12,11 +12,4 @@ public class DelegationMapperTest {
     public void setUp() {
         delegationMapper = new DelegationMapperImpl();
     }
-
-    @Test
-    public void testEntityFromId() {
-        Long id = 1L;
-        assertThat(delegationMapper.fromId(id).getId()).isEqualTo(id);
-        assertThat(delegationMapper.fromId(null)).isNull();
-    }
 }

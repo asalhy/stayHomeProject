@@ -12,11 +12,4 @@ public class LocalityMapperTest {
     public void setUp() {
         localityMapper = new LocalityMapperImpl();
     }
-
-    @Test
-    public void testEntityFromId() {
-        Long id = 1L;
-        assertThat(localityMapper.fromId(id).getId()).isEqualTo(id);
-        assertThat(localityMapper.fromId(null)).isNull();
-    }
 }

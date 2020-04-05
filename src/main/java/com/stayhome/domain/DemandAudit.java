@@ -1,17 +1,15 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.stayhome.domain.enumeration.DemandStatus;
+import com.stayhome.util.IpAddressHelper;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
-
-import com.stayhome.domain.enumeration.DemandStatus;
+import java.util.Objects;
 
 /**
  * A DemandAudit.
@@ -41,17 +39,29 @@ public class DemandAudit implements Serializable {
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
+    private LocalDate creationDate = LocalDate.now();
+
+    @NotNull
+    @Column(name = "user", nullable = false)
+    private String user;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("demandAudits")
-    private User user;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("demandAudits")
     private Demand demand;
+
+    public static DemandAudit createDemandAudit(Demand demand, DemandStatus status, String user) {
+        DemandAudit audit = new DemandAudit();
+
+        audit.setId(null);
+        audit.setDemand(demand);
+        audit.setCreationDate(LocalDate.now());
+        audit.setDescription(status.getDescription());
+        audit.setStatus(status);
+        audit.setIpAddress(IpAddressHelper.getIpAddress());
+        audit.setUser(user);
+
+        return audit;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -114,16 +124,16 @@ public class DemandAudit implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public DemandAudit user(User user) {
+    public DemandAudit user(String user) {
         this.user = user;
         return this;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
@@ -146,15 +156,18 @@ public class DemandAudit implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof DemandAudit)) {
             return false;
         }
-        return id != null && id.equals(((DemandAudit) o).id);
+
+        DemandAudit other = (DemandAudit) o;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.id);
     }
 
     @Override
@@ -164,6 +177,7 @@ public class DemandAudit implements Serializable {
             ", status='" + getStatus() + "'" +
             ", description='" + getDescription() + "'" +
             ", ipAddress='" + getIpAddress() + "'" +
+            ", user='" + getUser() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             "}";
     }

@@ -1,28 +1,25 @@
 package com.stayhome.service.mapper;
 
-
-import com.stayhome.domain.*;
+import com.stayhome.domain.ServiceType;
+import com.stayhome.repository.ServiceTypeRepository;
 import com.stayhome.service.dto.ServiceTypeDTO;
-
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Mapper for the entity {@link ServiceType} and its DTO {@link ServiceTypeDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface ServiceTypeMapper extends EntityMapper<ServiceTypeDTO, ServiceType> {
+@Mapper(componentModel = "spring")
+public abstract class ServiceTypeMapper {
 
+    @Autowired
+    private ServiceTypeRepository serviceTypeRepository;
 
-    @Mapping(target = "organizations", ignore = true)
-    @Mapping(target = "removeOrganization", ignore = true)
-    ServiceType toEntity(ServiceTypeDTO serviceTypeDTO);
+    public abstract ServiceType toEntity(ServiceTypeDTO serviceType);
 
-    default ServiceType fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        ServiceType serviceType = new ServiceType();
-        serviceType.setId(id);
-        return serviceType;
+    public abstract ServiceTypeDTO toDto(ServiceType serviceType);
+
+    public ServiceType findById(Long id) {
+        return this.serviceTypeRepository.getOne(id);
     }
 }

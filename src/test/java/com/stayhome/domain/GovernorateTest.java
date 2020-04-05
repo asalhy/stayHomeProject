@@ -9,14 +9,19 @@ public class GovernorateTest {
     @Test
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Governorate.class);
+
         Governorate governorate1 = new Governorate();
-        governorate1.setId(1L);
+        governorate1.setName("Le Kef");
+
         Governorate governorate2 = new Governorate();
-        governorate2.setId(governorate1.getId());
+        governorate2.setName(governorate1.getName());
+
         assertThat(governorate1).isEqualTo(governorate2);
-        governorate2.setId(2L);
+
+        governorate2.setName("Tunis");
         assertThat(governorate1).isNotEqualTo(governorate2);
-        governorate1.setId(null);
+
+        governorate2.setId(null);
         assertThat(governorate1).isNotEqualTo(governorate2);
     }
 }

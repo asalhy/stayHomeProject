@@ -1,5 +1,6 @@
 package com.stayhome.web.rest;
 
+import com.stayhome.security.UserPrincipal;
 import com.stayhome.service.OrganizationService;
 import com.stayhome.service.ServiceTypeService;
 import com.stayhome.exception.BadRequestAlertException;
@@ -11,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -89,6 +93,13 @@ public class ServiceTypeResource {
     @GetMapping("/service-types")
     public List<ServiceTypeDTO> getAllServiceTypes(@RequestParam(required = false) Long organizationId) {
         log.debug("REST request to get all ServiceTypes, organizationId = {}", organizationId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+            organizationId = principal.getOrganizationId();
+        }
+
         return serviceTypeService.findAll(organizationId);
     }
 

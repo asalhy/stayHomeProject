@@ -1,5 +1,3 @@
 id;name;requires_approval;default_phone;creation_date
-1;Tunisian Scoots;true;+26122558877;2020-04-05
-2;Tunisian Red Crescent;true;+26122558877;2020-04-04
-3;Municipal District of El Menzah;true;+26122558877;2020-04-04
-4;Bab Bhar Municipality;true;+26122558877;2020-04-04
+1;Scout;true;96.625.205;2020-04-05
+2;Croix Rouge;false;95.123.765;2020-04-04

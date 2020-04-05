@@ -1,19 +1,16 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.stayhome.domain.enumeration.DemandStatus;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-import com.stayhome.domain.enumeration.DemandStatus;
 
 /**
  * A Demand.
@@ -50,11 +47,11 @@ public class Demand implements Serializable {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private DemandStatus status;
+    private DemandStatus status = DemandStatus.OPEN;
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
+    private LocalDate creationDate = LocalDate.now();
 
     @OneToMany(mappedBy = "demand")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -62,21 +59,18 @@ public class Demand implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("demands")
     private Locality locality;
 
     @ManyToOne
-    @JsonIgnoreProperties("demands")
     private User assignee;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("demands")
     private Organization organization;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "service_id", referencedColumnName = "id")
     @NotNull
-    @JsonIgnoreProperties("demands")
     private ServiceType serviceType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -112,6 +106,10 @@ public class Demand implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return this.firstName + " " + lastName;
     }
 
     public String getPhone() {
@@ -194,12 +192,6 @@ public class Demand implements Serializable {
         return this;
     }
 
-    public Demand removeDemandAudit(DemandAudit demandAudit) {
-        this.demandAudits.remove(demandAudit);
-        demandAudit.setDemand(null);
-        return this;
-    }
-
     public void setDemandAudits(Set<DemandAudit> demandAudits) {
         this.demandAudits = demandAudits;
     }
@@ -257,20 +249,44 @@ public class Demand implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    public void open() {
+        this.status = DemandStatus.OPEN;
+        this.creationDate = LocalDate.now();
+        this.addDemandAudit(DemandAudit.createDemandAudit(this, DemandStatus.OPEN, this.getFullName()));
+    }
+
+    public void process() {
+    }
+
+    public void done() {
+    }
+
+    public void assignTo() {
+    }
+
+    public void cancel() {
+    }
+
+    public void reject() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Demand)) {
             return false;
         }
-        return id != null && id.equals(((Demand) o).id);
+
+        Demand other = (Demand) o;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.id);
     }
 
     @Override

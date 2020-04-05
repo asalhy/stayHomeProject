@@ -5,11 +5,11 @@ import com.stayhome.domain.Demand;
 import com.stayhome.domain.Locality;
 import com.stayhome.domain.Organization;
 import com.stayhome.domain.ServiceType;
+import com.stayhome.domain.enumeration.DemandStatus;
 import com.stayhome.repository.DemandRepository;
 import com.stayhome.service.DemandService;
 import com.stayhome.service.dto.DemandDTO;
 import com.stayhome.service.mapper.DemandMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -26,10 +27,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.stayhome.domain.enumeration.DemandStatus;
 /**
  * Integration tests for the {@link DemandResource} REST controller.
  */
@@ -89,9 +89,7 @@ public class DemandResourceIT {
             .lastName(DEFAULT_LAST_NAME)
             .phone(DEFAULT_PHONE)
             .email(DEFAULT_EMAIL)
-            .description(DEFAULT_DESCRIPTION)
-            .status(DEFAULT_STATUS)
-            .creationDate(DEFAULT_CREATION_DATE);
+            .description(DEFAULT_DESCRIPTION);
         // Add required entity
         Locality locality;
         if (TestUtil.findAll(em, Locality.class).isEmpty()) {
@@ -103,14 +101,7 @@ public class DemandResourceIT {
         }
         demand.setLocality(locality);
         // Add required entity
-        Organization organization;
-        if (TestUtil.findAll(em, Organization.class).isEmpty()) {
-            organization = OrganizationResourceIT.createEntity(em);
-            em.persist(organization);
-            em.flush();
-        } else {
-            organization = TestUtil.findAll(em, Organization.class).get(0);
-        }
+        Organization organization = TestUtil.findAll(em, Organization.class).get(0);
         demand.setOrganization(organization);
         // Add required entity
         ServiceType serviceType;
@@ -150,14 +141,7 @@ public class DemandResourceIT {
         }
         demand.setLocality(locality);
         // Add required entity
-        Organization organization;
-        if (TestUtil.findAll(em, Organization.class).isEmpty()) {
-            organization = OrganizationResourceIT.createUpdatedEntity(em);
-            em.persist(organization);
-            em.flush();
-        } else {
-            organization = TestUtil.findAll(em, Organization.class).get(0);
-        }
+        Organization organization = TestUtil.findAll(em, Organization.class).get(0);
         demand.setOrganization(organization);
         // Add required entity
         ServiceType serviceType;
@@ -199,29 +183,8 @@ public class DemandResourceIT {
         assertThat(testDemand.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testDemand.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDemand.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testDemand.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
+        assertThat(testDemand.getCreationDate()).isEqualTo(demand.getCreationDate());
     }
-
-    @Test
-    @Transactional
-    public void createDemandWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = demandRepository.findAll().size();
-
-        // Create the Demand with an existing ID
-        demand.setId(1L);
-        DemandDTO demandDTO = demandMapper.toDto(demand);
-
-        // An entity with an existing ID cannot be created, so this API call must fail
-        restDemandMockMvc.perform(post("/api/demands")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(demandDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demand in the database
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeCreate);
-    }
-
 
     @Test
     @Transactional
@@ -282,44 +245,6 @@ public class DemandResourceIT {
 
     @Test
     @Transactional
-    public void checkStatusIsRequired() throws Exception {
-        int databaseSizeBeforeTest = demandRepository.findAll().size();
-        // set the field null
-        demand.setStatus(null);
-
-        // Create the Demand, which fails.
-        DemandDTO demandDTO = demandMapper.toDto(demand);
-
-        restDemandMockMvc.perform(post("/api/demands")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(demandDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkCreationDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = demandRepository.findAll().size();
-        // set the field null
-        demand.setCreationDate(null);
-
-        // Create the Demand, which fails.
-        DemandDTO demandDTO = demandMapper.toDto(demand);
-
-        restDemandMockMvc.perform(post("/api/demands")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(demandDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllDemands() throws Exception {
         // Initialize the database
         demandRepository.saveAndFlush(demand);
@@ -335,9 +260,9 @@ public class DemandResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())));
+            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(demand.getCreationDate().toString())));
     }
-    
+
     @Test
     @Transactional
     public void getDemand() throws Exception {
@@ -355,7 +280,7 @@ public class DemandResourceIT {
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()));
+            .andExpect(jsonPath("$.creationDate").value(demand.getCreationDate().toString()));
     }
 
     @Test
@@ -364,82 +289,5 @@ public class DemandResourceIT {
         // Get the demand
         restDemandMockMvc.perform(get("/api/demands/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateDemand() throws Exception {
-        // Initialize the database
-        demandRepository.saveAndFlush(demand);
-
-        int databaseSizeBeforeUpdate = demandRepository.findAll().size();
-
-        // Update the demand
-        Demand updatedDemand = demandRepository.findById(demand.getId()).get();
-        // Disconnect from session so that the updates on updatedDemand are not directly saved in db
-        em.detach(updatedDemand);
-        updatedDemand
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
-            .phone(UPDATED_PHONE)
-            .email(UPDATED_EMAIL)
-            .description(UPDATED_DESCRIPTION)
-            .status(UPDATED_STATUS)
-            .creationDate(UPDATED_CREATION_DATE);
-        DemandDTO demandDTO = demandMapper.toDto(updatedDemand);
-
-        restDemandMockMvc.perform(put("/api/demands")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(demandDTO)))
-            .andExpect(status().isOk());
-
-        // Validate the Demand in the database
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeUpdate);
-        Demand testDemand = demandList.get(demandList.size() - 1);
-        assertThat(testDemand.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
-        assertThat(testDemand.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testDemand.getPhone()).isEqualTo(UPDATED_PHONE);
-        assertThat(testDemand.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testDemand.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testDemand.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testDemand.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
-    }
-
-    @Test
-    @Transactional
-    public void updateNonExistingDemand() throws Exception {
-        int databaseSizeBeforeUpdate = demandRepository.findAll().size();
-
-        // Create the Demand
-        DemandDTO demandDTO = demandMapper.toDto(demand);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restDemandMockMvc.perform(put("/api/demands")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(demandDTO)))
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demand in the database
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    public void deleteDemand() throws Exception {
-        // Initialize the database
-        demandRepository.saveAndFlush(demand);
-
-        int databaseSizeBeforeDelete = demandRepository.findAll().size();
-
-        // Delete the demand
-        restDemandMockMvc.perform(delete("/api/demands/{id}", demand.getId())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<Demand> demandList = demandRepository.findAll();
-        assertThat(demandList).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

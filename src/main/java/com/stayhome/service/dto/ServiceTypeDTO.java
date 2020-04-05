@@ -1,20 +1,18 @@
 package com.stayhome.service.dto;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.stayhome.domain.ServiceType} entity.
  */
 public class ServiceTypeDTO implements Serializable {
-    
+
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    
     public Long getId() {
         return id;
     }
@@ -29,34 +27,5 @@ public class ServiceTypeDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        ServiceTypeDTO serviceTypeDTO = (ServiceTypeDTO) o;
-        if (serviceTypeDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), serviceTypeDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "ServiceTypeDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            "}";
     }
 }

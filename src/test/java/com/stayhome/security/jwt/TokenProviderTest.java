@@ -5,6 +5,7 @@ import com.stayhome.security.AuthoritiesConstants;
 import java.security.Key;
 import java.util.*;
 
+import com.stayhome.security.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,8 +48,7 @@ public class TokenProviderTest {
 
     @Test
     public void testReturnFalseWhenJWTisMalformed() {
-        Authentication authentication = createAuthentication();
-        String token = tokenProvider.createToken(authentication, false);
+        String token = tokenProvider.createToken(new UserPrincipal("anonymous", 1L, Collections.singleton("ROLE_USER")), false);
         String invalidToken = token.substring(1);
         boolean isTokenValid = tokenProvider.validateToken(invalidToken);
 
@@ -59,8 +59,7 @@ public class TokenProviderTest {
     public void testReturnFalseWhenJWTisExpired() {
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", -ONE_MINUTE);
 
-        Authentication authentication = createAuthentication();
-        String token = tokenProvider.createToken(authentication, false);
+        String token = tokenProvider.createToken(new UserPrincipal("anonymous", 1L, Collections.singleton("ROLE_USER")), false);
 
         boolean isTokenValid = tokenProvider.validateToken(token);
 
@@ -81,12 +80,6 @@ public class TokenProviderTest {
         boolean isTokenValid = tokenProvider.validateToken("");
 
         assertThat(isTokenValid).isEqualTo(false);
-    }
-
-    private Authentication createAuthentication() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        return new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities);
     }
 
     private String createUnsupportedToken() {

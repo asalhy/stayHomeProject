@@ -1,16 +1,12 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A ServiceType.
@@ -29,11 +25,6 @@ public class ServiceType implements Serializable {
     @NotNull
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @ManyToMany(mappedBy = "serviceTypes")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<Organization> organizations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -57,30 +48,6 @@ public class ServiceType implements Serializable {
         this.name = name;
     }
 
-    public Set<Organization> getOrganizations() {
-        return organizations;
-    }
-
-    public ServiceType organizations(Set<Organization> organizations) {
-        this.organizations = organizations;
-        return this;
-    }
-
-    public ServiceType addOrganization(Organization organization) {
-        this.organizations.add(organization);
-        organization.getServiceTypes().add(this);
-        return this;
-    }
-
-    public ServiceType removeOrganization(Organization organization) {
-        this.organizations.remove(organization);
-        organization.getServiceTypes().remove(this);
-        return this;
-    }
-
-    public void setOrganizations(Set<Organization> organizations) {
-        this.organizations = organizations;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -88,15 +55,18 @@ public class ServiceType implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof ServiceType)) {
             return false;
         }
-        return id != null && id.equals(((ServiceType) o).id);
+
+        ServiceType other = (ServiceType) o;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.name);
     }
 
     @Override

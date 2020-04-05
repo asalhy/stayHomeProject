@@ -1,25 +1,26 @@
 package com.stayhome.security.jwt;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-
+import com.stayhome.security.UserPrincipal;
+import io.github.jhipster.config.JHipsterProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import io.github.jhipster.config.JHipsterProperties;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
@@ -27,6 +28,7 @@ public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String ORGANIZATION_KEY = "org";
 
     private Key key;
 
@@ -60,8 +62,9 @@ public class TokenProvider {
                 .getTokenValidityInSecondsForRememberMe();
     }
 
-    public String createToken(Authentication authentication, boolean rememberMe) {
-        String authorities = authentication.getAuthorities().stream()
+    public String createToken(UserPrincipal principal, boolean rememberMe) {
+        String authorities = principal.getAuthorities()
+            .stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
@@ -74,8 +77,9 @@ public class TokenProvider {
         }
 
         return Jwts.builder()
-            .setSubject(authentication.getName())
+            .setSubject(principal.getUsername())
             .claim(AUTHORITIES_KEY, authorities)
+            .claim(ORGANIZATION_KEY, principal.getOrganizationId())
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -87,14 +91,11 @@ public class TokenProvider {
             .parseClaimsJws(token)
             .getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
-            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        Long organizationId = claims.get(ORGANIZATION_KEY, Long.class);
+        Collection<String> authorities = Arrays.asList(claims.get(AUTHORITIES_KEY, String.class).split(","));
 
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        UserPrincipal principal = new UserPrincipal(claims.getSubject(), organizationId, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
     }
 
     public boolean validateToken(String authToken) {

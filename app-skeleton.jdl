@@ -43,7 +43,8 @@ application {
 
 // Entities
 entity Governorate (governorates) {
-  name String required unique
+  name String required unique,
+  code String required unique
 }
 
 entity Delegation (delegations) {
@@ -89,6 +90,7 @@ entity DemandAudit (demand_audits) {
   status DemandStatus required,
   description String,
   ipAddress String required,
+  user String required,
   creationDate LocalDate required
 }
 
@@ -110,7 +112,6 @@ relationship ManyToOne {
   Demand{assignee} to User,
   Demand{organization required} to Organization,
   Demand{serviceType required} to ServiceType,
-  DemandAudit{user required} to User
   // User{organization} to Organization
 }
 
@@ -124,4 +125,4 @@ dto Governorate, Delegation, Locality, ServiceType, Demand, DemandAudit, Organiz
 service Governorate, Delegation, Locality, ServiceType, Demand, Organization with serviceClass
 
 // Readonly
-readOnly Governorate, Delegation, Locality, DemandAudit
+readOnly Governorate, Delegation, Locality, DemandAudit, Organization

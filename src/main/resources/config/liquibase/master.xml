@@ -13,19 +13,13 @@
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
-    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130200_added_entity_Governorate.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130300_added_entity_Delegation.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130400_added_entity_Locality.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130500_added_entity_ServiceType.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130600_added_entity_Organization.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130700_added_entity_Demand.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130800_added_entity_DemandAudit.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20200405130300_added_entity_constraints_Delegation.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130400_added_entity_constraints_Locality.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130600_added_entity_constraints_Organization.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130700_added_entity_constraints_Demand.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200405130800_added_entity_constraints_DemandAudit.xml" relativeToChangelogFile="false"/>
-    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/01_ServiceType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/02_Governorate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/03_Delegation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/04_Locality.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/05_Organization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/06_User.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/07_Demand.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/08_DemandAudit.xml" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>

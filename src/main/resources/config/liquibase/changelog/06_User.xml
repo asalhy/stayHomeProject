@@ -12,7 +12,8 @@
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
-    <changeSet id="00000000000001" author="jhipster">
+    <changeSet id="06-1-script" author="jhipster">
+
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -20,11 +21,23 @@
             <column name="login" type="varchar(50)">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
+            <column name="cin" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_cin"/>
+            </column>
+            <column name="phone" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="group_name" type="varchar(255)"/>
+            <column name="membership_id" type="varchar(50)"/>
             <column name="password_hash" type="varchar(60)"/>
-            <column name="first_name" type="varchar(50)"/>
-            <column name="last_name" type="varchar(50)"/>
+            <column name="first_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
             <column name="email" type="varchar(191)">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
@@ -42,6 +55,9 @@
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
+            <column name="organization_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <createTable tableName="jhi_authority">
@@ -76,27 +92,15 @@
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="jhi_user"/>
-        <loadData
-                  file="config/liquibase/data/user.csv"
-                  separator=";"
-                  tableName="jhi_user">
-            <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
-        </loadData>
-        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
-        <loadData
-                  file="config/liquibase/data/authority.csv"
-                  separator=";"
-                  tableName="jhi_authority">
-            <column name="name" type="string"/>
-        </loadData>
 
-        <loadData
-                  file="config/liquibase/data/user_authority.csv"
-                  separator=";"
-                  tableName="jhi_user_authority">
-            <column name="user_id" type="numeric"/>
-        </loadData>
+        <addForeignKeyConstraint baseColumnNames="organization_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_users_organizations_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organizations"/>
+
+        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
+
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -139,7 +143,54 @@
                                  referencedTableName="jhi_persistent_audit_event"/>
     </changeSet>
 
-    <changeSet author="jhipster" id="00000000000002" context="test">
+    <changeSet id="06-2-relations" author="jhipster">
+        <createTable tableName="users_localities">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locality_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="users_services">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="service_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, locality_id" tableName="users_localities"/>
+        <addPrimaryKey columnNames="user_id, service_id" tableName="users_services"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="users_localities"
+                                 constraintName="fk_users_localities_users_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="locality_id"
+                                 baseTableName="users_localities"
+                                 constraintName="fk_users_localities_localities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="localities"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="users_services"
+                                 constraintName="fk_users_services_users_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="service_id"
+                                 baseTableName="users_services"
+                                 constraintName="fk_users_services_services_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="services"/>
+    </changeSet>
+
+    <changeSet id="06-3-script" author="jhipster" context="test">
         <createTable tableName="jhi_date_time_wrapper">
             <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
@@ -153,4 +204,32 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="06-4-data" author="jhipster">
+        <loadData
+            file="config/liquibase/data/authority.csv"
+            separator=";"
+            tableName="jhi_authority">
+            <column name="name" type="string"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="06-5-data" author="jhipster" context="dev">
+        <loadData
+            file="config/liquibase/fake-data/user.csv"
+            separator=";"
+            tableName="jhi_user">
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="organization_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/fake-data/user_authority.csv"
+            separator=";"
+            tableName="jhi_user_authority">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+
 </databaseChangeLog>

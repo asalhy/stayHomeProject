@@ -4,12 +4,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -44,9 +44,9 @@ public class Organization implements Serializable {
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "organizations_service_types",
+    @JoinTable(name = "organizations_services",
                joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "service_types_id", referencedColumnName = "id"))
+               inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"))
     private Set<ServiceType> serviceTypes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -121,13 +121,11 @@ public class Organization implements Serializable {
 
     public Organization addServiceTypes(ServiceType serviceType) {
         this.serviceTypes.add(serviceType);
-        serviceType.getOrganizations().add(this);
         return this;
     }
 
     public Organization removeServiceTypes(ServiceType serviceType) {
         this.serviceTypes.remove(serviceType);
-        serviceType.getOrganizations().remove(this);
         return this;
     }
 
@@ -141,15 +139,18 @@ public class Organization implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Organization)) {
             return false;
         }
-        return id != null && id.equals(((Organization) o).id);
+
+        Organization other = (Organization) o;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.name);
     }
 
     @Override

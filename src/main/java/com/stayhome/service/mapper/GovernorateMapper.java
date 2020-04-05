@@ -1,25 +1,14 @@
 package com.stayhome.service.mapper;
 
-
-import com.stayhome.domain.*;
+import com.stayhome.domain.Governorate;
 import com.stayhome.service.dto.GovernorateDTO;
-
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
 
 /**
  * Mapper for the entity {@link Governorate} and its DTO {@link GovernorateDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
-public interface GovernorateMapper extends EntityMapper<GovernorateDTO, Governorate> {
+@Mapper(componentModel = "spring")
+public interface GovernorateMapper {
 
-
-
-    default Governorate fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Governorate governorate = new Governorate();
-        governorate.setId(id);
-        return governorate;
-    }
+    GovernorateDTO toDto(Governorate governorate);
 }

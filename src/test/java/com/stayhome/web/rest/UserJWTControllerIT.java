@@ -1,7 +1,9 @@
 package com.stayhome.web.rest;
 
 import com.stayhome.StayHomeApp;
+import com.stayhome.domain.Organization;
 import com.stayhome.domain.User;
+import com.stayhome.repository.OrganizationRepository;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,9 @@ public class UserJWTControllerIT {
     private UserRepository userRepository;
 
     @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -47,6 +52,11 @@ public class UserJWTControllerIT {
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setCin("08123765");
+        user.setPhone("98.546.988");
+        user.setOrganization(this.organizationRepository.getOne(1L));
 
         userRepository.saveAndFlush(user);
 
@@ -71,6 +81,11 @@ public class UserJWTControllerIT {
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setCin("08123765");
+        user.setPhone("98.546.988");
+        user.setOrganization(this.organizationRepository.getOne(1L));
 
         userRepository.saveAndFlush(user);
 

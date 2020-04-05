@@ -22,7 +22,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Demand}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/demands")
 public class DemandResource {
 
     private final Logger log = LoggerFactory.getLogger(DemandResource.class);
@@ -45,36 +45,15 @@ public class DemandResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new demandDTO, or with status {@code 400 (Bad Request)} if the demand has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/demands")
+    @PostMapping
     public ResponseEntity<DemandDTO> createDemand(@Valid @RequestBody DemandDTO demandDTO) throws URISyntaxException {
         log.debug("REST request to save Demand : {}", demandDTO);
         if (demandDTO.getId() != null) {
             throw new BadRequestAlertException("A new demand cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DemandDTO result = demandService.save(demandDTO);
+        DemandDTO result = demandService.createDemand(demandDTO);
         return ResponseEntity.created(new URI("/api/demands/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    /**
-     * {@code PUT  /demands} : Updates an existing demand.
-     *
-     * @param demandDTO the demandDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated demandDTO,
-     * or with status {@code 400 (Bad Request)} if the demandDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the demandDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/demands")
-    public ResponseEntity<DemandDTO> updateDemand(@Valid @RequestBody DemandDTO demandDTO) throws URISyntaxException {
-        log.debug("REST request to update Demand : {}", demandDTO);
-        if (demandDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        DemandDTO result = demandService.save(demandDTO);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, demandDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,10 +62,10 @@ public class DemandResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of demands in body.
      */
-    @GetMapping("/demands")
+    @GetMapping
     public List<DemandDTO> getAllDemands() {
         log.debug("REST request to get all Demands");
-        return demandService.findAll();
+        return demandService.getDemands();
     }
 
     /**
@@ -95,23 +74,11 @@ public class DemandResource {
      * @param id the id of the demandDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the demandDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/demands/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DemandDTO> getDemand(@PathVariable Long id) {
         log.debug("REST request to get Demand : {}", id);
-        Optional<DemandDTO> demandDTO = demandService.findOne(id);
+        // FIXME - Must fetch demands by current organization
+        Optional<DemandDTO> demandDTO = demandService.getDemand(id);
         return ResponseUtil.wrapOrNotFound(demandDTO);
-    }
-
-    /**
-     * {@code DELETE  /demands/:id} : delete the "id" demand.
-     *
-     * @param id the id of the demandDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/demands/{id}")
-    public ResponseEntity<Void> deleteDemand(@PathVariable Long id) {
-        log.debug("REST request to delete Demand : {}", id);
-        demandService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -1,46 +1,52 @@
 package com.stayhome.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.stayhome.domain.enumeration.DemandStatus;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * A DTO for the {@link com.stayhome.domain.Demand} entity.
  */
 public class DemandDTO implements Serializable {
-    
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String firstName;
 
-    @NotNull
+    @NotBlank
     private String lastName;
 
-    @NotNull
+    @NotBlank
     private String phone;
 
     private String email;
 
     private String description;
 
-    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private DemandStatus status;
 
-    @NotNull
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate creationDate;
 
-
+    @NotNull
     private Long localityId;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long assigneeId;
 
+    @NotNull
     private Long organizationId;
 
+    @NotNull
     private Long serviceTypeId;
-    
+
     public Long getId() {
         return id;
     }
@@ -135,44 +141,5 @@ public class DemandDTO implements Serializable {
 
     public void setServiceTypeId(Long serviceTypeId) {
         this.serviceTypeId = serviceTypeId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        DemandDTO demandDTO = (DemandDTO) o;
-        if (demandDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), demandDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "DemandDTO{" +
-            "id=" + getId() +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", creationDate='" + getCreationDate() + "'" +
-            ", localityId=" + getLocalityId() +
-            ", assigneeId=" + getAssigneeId() +
-            ", organizationId=" + getOrganizationId() +
-            ", serviceTypeId=" + getServiceTypeId() +
-            "}";
     }
 }

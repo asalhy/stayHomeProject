@@ -3,11 +3,13 @@ package com.stayhome.web.rest;
 import com.stayhome.StayHomeApp;
 import com.stayhome.config.Constants;
 import com.stayhome.domain.Authority;
+import com.stayhome.domain.Organization;
 import com.stayhome.domain.User;
 import com.stayhome.repository.AuthorityRepository;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.security.AuthoritiesConstants;
 import com.stayhome.service.UserService;
+import com.stayhome.service.dto.OrganizationDTO;
 import com.stayhome.service.dto.PasswordChangeDTO;
 import com.stayhome.service.dto.UserDTO;
 import com.stayhome.web.rest.vm.KeyAndPasswordVM;
@@ -92,6 +94,11 @@ public class AccountResourceIT {
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
         user.setAuthorities(authorities);
+        user.setCin("08345678");
+        user.setPhone("98.654.987");
+        user.setOrganization(new OrganizationDTO());
+        user.getOrganization().setId(1L);
+
         userService.createUser(user);
 
         restAccountMockMvc.perform(get("/api/account")
@@ -126,6 +133,10 @@ public class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setCin("08987654");
+        validUser.setPhone("55.765.874");
+        validUser.setOrganization(new OrganizationDTO());
+        validUser.getOrganization().setId(1L);
         assertThat(userRepository.findOneByLogin("test-register-valid").isPresent()).isFalse();
 
         restAccountMockMvc.perform(
@@ -246,6 +257,10 @@ public class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setCin("08761009");
+        firstUser.setPhone("96.456.098");
+        firstUser.setOrganization(new OrganizationDTO());
+        firstUser.getOrganization().setId(1L);
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -261,6 +276,10 @@ public class AccountResourceIT {
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
         secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+        secondUser.setCin("05876123");
+        secondUser.setPhone("98.001.001");
+        secondUser.setOrganization(new OrganizationDTO());
+        secondUser.getOrganization().setId(1L);
 
         // First user
         restAccountMockMvc.perform(
@@ -302,6 +321,10 @@ public class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setPhone("90.765.665");
+        firstUser.setCin("09765432");
+        firstUser.setOrganization(new OrganizationDTO());
+        firstUser.getOrganization().setId(1L);
 
         // Register first user
         restAccountMockMvc.perform(
@@ -323,6 +346,10 @@ public class AccountResourceIT {
         secondUser.setImageUrl(firstUser.getImageUrl());
         secondUser.setLangKey(firstUser.getLangKey());
         secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+        secondUser.setPhone("55.134.987");
+        secondUser.setCin("08165983");
+        secondUser.setOrganization(new OrganizationDTO());
+        secondUser.getOrganization().setId(1L);
 
         // Register second (non activated) user
         restAccountMockMvc.perform(
@@ -348,6 +375,10 @@ public class AccountResourceIT {
         userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
         userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
         userWithUpperCaseEmail.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
+        userWithUpperCaseEmail.setOrganization(new OrganizationDTO());
+        userWithUpperCaseEmail.getOrganization().setId(1L);
+        userWithUpperCaseEmail.setCin("06987435");
+        userWithUpperCaseEmail.setPhone("98.654.120");
 
         // Register third (not activated) user
         restAccountMockMvc.perform(
@@ -383,6 +414,10 @@ public class AccountResourceIT {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        validUser.setCin("05987131");
+        validUser.setPhone("90.765.543");
+        validUser.setOrganization(new OrganizationDTO());
+        validUser.getOrganization().setId(1L);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
         restAccountMockMvc.perform(
@@ -407,6 +442,13 @@ public class AccountResourceIT {
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(false);
         user.setActivationKey(activationKey);
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
 
         userRepository.saveAndFlush(user);
 
@@ -433,6 +475,13 @@ public class AccountResourceIT {
         user.setEmail("save-account@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
 
         userRepository.saveAndFlush(user);
 
@@ -445,6 +494,10 @@ public class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setOrganization(new OrganizationDTO());
+        userDTO.getOrganization().setId(1L);
+        userDTO.setPhone("97.149.765");
+        userDTO.setCin("08654789");
 
         restAccountMockMvc.perform(
             post("/api/account")
@@ -468,6 +521,13 @@ public class AccountResourceIT {
     @WithMockUser("save-invalid-email")
     public void testSaveInvalidEmail() throws Exception {
         User user = new User();
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
         user.setLogin("save-invalid-email");
         user.setEmail("save-invalid-email@example.com");
         user.setPassword(RandomStringUtils.random(60));
@@ -499,6 +559,13 @@ public class AccountResourceIT {
     @WithMockUser("save-existing-email")
     public void testSaveExistingEmail() throws Exception {
         User user = new User();
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
         user.setLogin("save-existing-email");
         user.setEmail("save-existing-email@example.com");
         user.setPassword(RandomStringUtils.random(60));
@@ -507,6 +574,13 @@ public class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
+        anotherUser.setOrganization(new Organization());
+        anotherUser.getOrganization().setName("Scout");
+        anotherUser.getOrganization().setId(1L);
+        anotherUser.setFirstName("Jane");
+        anotherUser.setLastName("DOE");
+        anotherUser.setPhone("55.654.100");
+        anotherUser.setCin("07543129");
         anotherUser.setLogin("save-existing-email2");
         anotherUser.setEmail("save-existing-email2@example.com");
         anotherUser.setPassword(RandomStringUtils.random(60));
@@ -543,6 +617,13 @@ public class AccountResourceIT {
         user.setEmail("save-existing-email-and-login@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
 
         userRepository.saveAndFlush(user);
 
@@ -555,6 +636,10 @@ public class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setOrganization(new OrganizationDTO());
+        userDTO.getOrganization().setId(1L);
+        userDTO.setPhone("97.149.765");
+        userDTO.setCin("08654789");
 
         restAccountMockMvc.perform(
             post("/api/account")
@@ -575,6 +660,14 @@ public class AccountResourceIT {
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-wrong-existing-password");
         user.setEmail("change-password-wrong-existing-password@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -597,6 +690,14 @@ public class AccountResourceIT {
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password");
         user.setEmail("change-password@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -618,6 +719,14 @@ public class AccountResourceIT {
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
@@ -641,6 +750,14 @@ public class AccountResourceIT {
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
@@ -664,6 +781,14 @@ public class AccountResourceIT {
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-empty");
         user.setEmail("change-password-empty@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -680,6 +805,13 @@ public class AccountResourceIT {
     @Transactional
     public void testRequestPasswordReset() throws Exception {
         User user = new User();
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
         user.setLogin("password-reset");
@@ -700,6 +832,14 @@ public class AccountResourceIT {
         user.setActivated(true);
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
@@ -724,7 +864,14 @@ public class AccountResourceIT {
         user.setLogin("finish-password-reset");
         user.setEmail("finish-password-reset@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
-        user.setResetKey("reset key");
+        user.setResetKey("reset key");        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
+
         userRepository.saveAndFlush(user);
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
@@ -745,6 +892,13 @@ public class AccountResourceIT {
     @Transactional
     public void testFinishPasswordResetTooSmall() throws Exception {
         User user = new User();
+        user.setOrganization(new Organization());
+        user.getOrganization().setName("Scout");
+        user.getOrganization().setId(1L);
+        user.setFirstName("John");
+        user.setLastName("DOE");
+        user.setPhone("97.149.765");
+        user.setCin("08654789");
         user.setPassword(RandomStringUtils.random(60));
         user.setLogin("finish-password-reset-too-small");
         user.setEmail("finish-password-reset-too-small@example.com");

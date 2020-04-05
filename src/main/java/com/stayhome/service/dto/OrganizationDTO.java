@@ -1,33 +1,25 @@
 package com.stayhome.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.stayhome.domain.Organization} entity.
  */
 public class OrganizationDTO implements Serializable {
-    
+
+    @NotNull
     private Long id;
 
-    @NotNull
     private String name;
-
-    @NotNull
     private Boolean requiresApproval;
-
-    @NotNull
     private String defaultPhone;
-
-    @NotNull
     private LocalDate creationDate;
-
     private Set<ServiceTypeDTO> serviceTypes = new HashSet<>();
-    
+
     public Long getId() {
         return id;
     }
@@ -74,38 +66,5 @@ public class OrganizationDTO implements Serializable {
 
     public void setServiceTypes(Set<ServiceTypeDTO> serviceTypes) {
         this.serviceTypes = serviceTypes;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        OrganizationDTO organizationDTO = (OrganizationDTO) o;
-        if (organizationDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), organizationDTO.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "OrganizationDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", requiresApproval='" + isRequiresApproval() + "'" +
-            ", defaultPhone='" + getDefaultPhone() + "'" +
-            ", creationDate='" + getCreationDate() + "'" +
-            ", serviceTypes='" + getServiceTypes() + "'" +
-            "}";
     }
 }

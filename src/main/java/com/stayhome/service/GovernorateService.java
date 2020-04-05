@@ -34,19 +34,6 @@ public class GovernorateService {
     }
 
     /**
-     * Save a governorate.
-     *
-     * @param governorateDTO the entity to save.
-     * @return the persisted entity.
-     */
-    public GovernorateDTO save(GovernorateDTO governorateDTO) {
-        log.debug("Request to save Governorate : {}", governorateDTO);
-        Governorate governorate = governorateMapper.toEntity(governorateDTO);
-        governorate = governorateRepository.save(governorate);
-        return governorateMapper.toDto(governorate);
-    }
-
-    /**
      * Get all the governorates.
      *
      * @return the list of entities.
@@ -70,15 +57,5 @@ public class GovernorateService {
         log.debug("Request to get Governorate : {}", id);
         return governorateRepository.findById(id)
             .map(governorateMapper::toDto);
-    }
-
-    /**
-     * Delete the governorate by id.
-     *
-     * @param id the id of the entity.
-     */
-    public void delete(Long id) {
-        log.debug("Request to delete Governorate : {}", id);
-        governorateRepository.deleteById(id);
     }
 }

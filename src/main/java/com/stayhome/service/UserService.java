@@ -7,8 +7,13 @@ import com.stayhome.repository.AuthorityRepository;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.security.AuthoritiesConstants;
 import com.stayhome.security.SecurityUtils;
+import com.stayhome.service.dto.LocalityDTO;
+import com.stayhome.service.dto.ServiceTypeDTO;
 import com.stayhome.service.dto.UserDTO;
 
+import com.stayhome.service.mapper.LocalityMapper;
+import com.stayhome.service.mapper.OrganizationMapper;
+import com.stayhome.service.mapper.ServiceTypeMapper;
 import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
@@ -36,18 +41,22 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthorityRepository authorityRepository;
-
     private final CacheManager cacheManager;
+    private final ServiceTypeMapper serviceTypeMapper;
+    private final LocalityMapper localityMapper;
+    private final OrganizationMapper organizationMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager,
+                       OrganizationMapper organizationMapper, LocalityMapper localityMapper, ServiceTypeMapper serviceTypeMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.organizationMapper = organizationMapper;
+        this.serviceTypeMapper = serviceTypeMapper;
+        this.localityMapper = localityMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -107,6 +116,20 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
+        newUser.setGroupName(userDTO.getGroupName());
+        newUser.setMembershipId(userDTO.getMembershipId());
+        newUser.setCin(userDTO.getCin());
+        newUser.setPhone(userDTO.getPhone());
+        newUser.setOrganization(this.organizationMapper.findById(userDTO.getOrganization().getId()));
+        newUser.setLocalities((userDTO.getLocalities() != null)
+            ? userDTO.getLocalities().stream().map(LocalityDTO::getId).map(this.localityMapper::findById).collect(Collectors.toSet())
+            : Collections.emptySet()
+        );
+        newUser.setServiceTypes((userDTO.getServiceTypes() != null)
+            ? userDTO.getServiceTypes().stream().map(ServiceTypeDTO::getId).map(this.serviceTypeMapper::findById).collect(Collectors.toSet())
+            : Collections.emptySet()
+        );
+
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
@@ -140,6 +163,19 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setCin(userDTO.getCin());
+        user.setPhone(userDTO.getPhone());
+        user.setGroupName(userDTO.getGroupName());
+        user.setMembershipId(userDTO.getMembershipId());
+        user.setOrganization(this.organizationMapper.findById(userDTO.getOrganization().getId()));
+        user.setServiceTypes((userDTO.getServiceTypes() != null)
+            ? userDTO.getServiceTypes().stream().map(ServiceTypeDTO::getId).map(this.serviceTypeMapper::findById).collect(Collectors.toSet())
+            : Collections.emptySet()
+        );
+        user.setLocalities((userDTO.getLocalities() != null)
+            ? userDTO.getLocalities().stream().map(LocalityDTO::getId).map(this.localityMapper::findById).collect(Collectors.toSet())
+            : Collections.emptySet()
+        );
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }

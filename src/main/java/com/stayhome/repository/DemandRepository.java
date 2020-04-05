@@ -1,19 +1,18 @@
 package com.stayhome.repository;
 
 import com.stayhome.domain.Demand;
-
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Spring Data  repository for the Demand entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DemandRepository extends JpaRepository<Demand, Long> {
+public interface DemandRepository extends JpaRepository<Demand, Long>, JpaSpecificationExecutor<Demand> {
 
-    @Query("select demand from Demand demand where demand.assignee.login = ?#{principal.username}")
-    List<Demand> findByAssigneeIsCurrentUser();
+    // Use specification
+    // List<Demand> findAllByOrganization(Organization organization);
+    // List<Demand> findAllByOrganizationAndAssignee(Organization organization, User assignee);
 }

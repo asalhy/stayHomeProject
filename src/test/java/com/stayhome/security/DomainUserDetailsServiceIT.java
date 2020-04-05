@@ -1,7 +1,9 @@
 package com.stayhome.security;
 
 import com.stayhome.StayHomeApp;
+import com.stayhome.domain.Organization;
 import com.stayhome.domain.User;
+import com.stayhome.repository.OrganizationRepository;
 import com.stayhome.repository.UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -36,6 +38,9 @@ public class DomainUserDetailsServiceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
     private UserDetailsService domainUserDetailsService;
 
     private User userOne;
@@ -44,6 +49,8 @@ public class DomainUserDetailsServiceIT {
 
     @BeforeEach
     public void init() {
+        Organization organization = this.organizationRepository.getOne(1L);
+
         userOne = new User();
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
@@ -52,6 +59,9 @@ public class DomainUserDetailsServiceIT {
         userOne.setFirstName("userOne");
         userOne.setLastName("doe");
         userOne.setLangKey("en");
+        userOne.setCin("08123456");
+        userOne.setPhone("96.234.654");
+        userOne.setOrganization(organization);
         userRepository.save(userOne);
 
         userTwo = new User();
@@ -62,6 +72,9 @@ public class DomainUserDetailsServiceIT {
         userTwo.setFirstName("userTwo");
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
+        userTwo.setCin("09987654");
+        userTwo.setPhone("98.145.786");
+        userTwo.setOrganization(organization);
         userRepository.save(userTwo);
 
         userThree = new User();
@@ -72,6 +85,9 @@ public class DomainUserDetailsServiceIT {
         userThree.setFirstName("userThree");
         userThree.setLastName("doe");
         userThree.setLangKey("en");
+        userThree.setCin("06456982");
+        userThree.setPhone("55.720.450");
+        userThree.setOrganization(organization);
         userRepository.save(userThree);
     }
 
@@ -80,6 +96,7 @@ public class DomainUserDetailsServiceIT {
     public void assertThatUserCanBeFoundByLogin() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN);
         assertThat(userDetails).isNotNull();
+        assertThat(userDetails).isInstanceOf(UserPrincipal.class);
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 
@@ -88,6 +105,7 @@ public class DomainUserDetailsServiceIT {
     public void assertThatUserCanBeFoundByLoginIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH));
         assertThat(userDetails).isNotNull();
+        assertThat(userDetails).isInstanceOf(UserPrincipal.class);
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 
@@ -96,6 +114,7 @@ public class DomainUserDetailsServiceIT {
     public void assertThatUserCanBeFoundByEmail() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL);
         assertThat(userDetails).isNotNull();
+        assertThat(userDetails).isInstanceOf(UserPrincipal.class);
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
@@ -104,6 +123,7 @@ public class DomainUserDetailsServiceIT {
     public void assertThatUserCanBeFoundByEmailIgnoreCase() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH));
         assertThat(userDetails).isNotNull();
+        assertThat(userDetails).isInstanceOf(UserPrincipal.class);
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
@@ -112,6 +132,7 @@ public class DomainUserDetailsServiceIT {
     public void assertThatEmailIsPrioritizedOverLogin() {
         UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL);
         assertThat(userDetails).isNotNull();
+        assertThat(userDetails).isInstanceOf(UserPrincipal.class);
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 

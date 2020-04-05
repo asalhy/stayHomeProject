@@ -9,14 +9,18 @@ public class ServiceTypeTest {
     @Test
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(ServiceType.class);
+
         ServiceType serviceType1 = new ServiceType();
-        serviceType1.setId(1L);
+        serviceType1.setName("Health");
+
         ServiceType serviceType2 = new ServiceType();
-        serviceType2.setId(serviceType1.getId());
+        serviceType2.setName(serviceType1.getName());
         assertThat(serviceType1).isEqualTo(serviceType2);
-        serviceType2.setId(2L);
+
+        serviceType2.setName("Food");
         assertThat(serviceType1).isNotEqualTo(serviceType2);
-        serviceType1.setId(null);
+
+        serviceType2.setName(null);
         assertThat(serviceType1).isNotEqualTo(serviceType2);
     }
 }

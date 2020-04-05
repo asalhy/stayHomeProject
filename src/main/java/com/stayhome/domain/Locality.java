@@ -1,12 +1,10 @@
 package com.stayhome.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -34,7 +32,6 @@ public class Locality implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("localities")
     private Delegation delegation;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -91,15 +88,18 @@ public class Locality implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Locality)) {
             return false;
         }
-        return id != null && id.equals(((Locality) o).id);
+
+        Locality other = (Locality) o;
+        return Objects.equals(this.name, other.name) && Objects.equals(this.delegation, other.delegation);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(this.name, this.delegation);
     }
 
     @Override

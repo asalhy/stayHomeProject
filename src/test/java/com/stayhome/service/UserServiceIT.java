@@ -2,6 +2,7 @@ package com.stayhome.service;
 
 import com.stayhome.StayHomeApp;
 import com.stayhome.config.Constants;
+import com.stayhome.domain.Organization;
 import com.stayhome.domain.User;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.service.dto.UserDTO;
@@ -72,6 +73,11 @@ public class UserServiceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        user.setPhone("98.123.987");
+        user.setCin("08765432");
+        user.setOrganization(new Organization());
+        user.getOrganization().setId(1L);
+        user.getOrganization().setName("Scout");
 
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
         auditingHandler.setDateTimeProvider(dateTimeProvider);

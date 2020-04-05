@@ -16,7 +16,7 @@ import java.util.Optional;
  * REST controller for managing {@link com.stayhome.domain.Governorate}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/governorates")
 public class GovernorateResource {
 
     private final Logger log = LoggerFactory.getLogger(GovernorateResource.class);
@@ -32,7 +32,7 @@ public class GovernorateResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of governorates in body.
      */
-    @GetMapping("/governorates")
+    @GetMapping
     public List<GovernorateDTO> getAllGovernorates() {
         log.debug("REST request to get all Governorates");
         return governorateService.findAll();
@@ -44,7 +44,7 @@ public class GovernorateResource {
      * @param id the id of the governorateDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the governorateDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/governorates/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<GovernorateDTO> getGovernorate(@PathVariable Long id) {
         log.debug("REST request to get Governorate : {}", id);
         Optional<GovernorateDTO> governorateDTO = governorateService.findOne(id);

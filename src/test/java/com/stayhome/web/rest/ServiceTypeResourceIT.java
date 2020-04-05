@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = StayHomeApp.class)
 
 @AutoConfigureMockMvc
-@WithMockUser
 public class ServiceTypeResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -82,6 +81,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void createServiceType() throws Exception {
         int databaseSizeBeforeCreate = serviceTypeRepository.findAll().size();
@@ -101,6 +101,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void createServiceTypeWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = serviceTypeRepository.findAll().size();
@@ -122,6 +123,7 @@ public class ServiceTypeResourceIT {
 
 
     @Test
+    @WithMockUser
     @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = serviceTypeRepository.findAll().size();
@@ -153,8 +155,9 @@ public class ServiceTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(serviceType.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
-    
+
     @Test
+    @WithMockUser
     @Transactional
     public void getServiceType() throws Exception {
         // Initialize the database
@@ -169,6 +172,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void getNonExistingServiceType() throws Exception {
         // Get the serviceType
@@ -177,6 +181,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void updateServiceType() throws Exception {
         // Initialize the database
@@ -205,6 +210,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void updateNonExistingServiceType() throws Exception {
         int databaseSizeBeforeUpdate = serviceTypeRepository.findAll().size();
@@ -224,6 +230,7 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public void deleteServiceType() throws Exception {
         // Initialize the database

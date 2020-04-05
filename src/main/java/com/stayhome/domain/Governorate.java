@@ -4,8 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -48,6 +47,7 @@ public class Governorate implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -55,15 +55,18 @@ public class Governorate implements Serializable {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Governorate)) {
             return false;
         }
-        return id != null && id.equals(((Governorate) o).id);
+
+        Governorate other = (Governorate) o;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(this.name);
     }
 
     @Override

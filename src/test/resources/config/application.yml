@@ -45,7 +45,7 @@ spring:
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
   liquibase:
-    contexts: test
+    contexts: test, dev
   mail:
     host: localhost
   main:

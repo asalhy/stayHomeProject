@@ -2,6 +2,8 @@ package com.stayhome.service.mapper;
 
 import com.stayhome.domain.Authority;
 import com.stayhome.domain.User;
+import com.stayhome.service.dto.LocalityDTO;
+import com.stayhome.service.dto.ServiceTypeDTO;
 import com.stayhome.service.dto.UserDTO;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +18,18 @@ import java.util.stream.Collectors;
  * support is still in beta, and requires a manual step with an IDE.
  */
 @Service
+// FIXME - Use mapstruct
 public class UserMapper {
+
+    private final OrganizationMapper organizationMapper;
+    private final LocalityMapper localityMapper;
+    private final ServiceTypeMapper serviceTypeMapper;
+
+    public UserMapper(OrganizationMapper organizationMapper, LocalityMapper localityMapper, ServiceTypeMapper serviceTypeMapper) {
+        this.organizationMapper = organizationMapper;
+        this.localityMapper = localityMapper;
+        this.serviceTypeMapper = serviceTypeMapper;
+    }
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
@@ -49,12 +62,23 @@ public class UserMapper {
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            user.setAuthorities(authorities);
+            user.setCin(userDTO.getCin());
+            user.setPhone(userDTO.getPhone());
+            user.setGroupName(userDTO.getGroupName());
+            user.setMembershipId(userDTO.getMembershipId());
+            user.setAuthorities(this.authoritiesFromStrings(userDTO.getAuthorities()));
+            user.setOrganization(this.organizationMapper.findById(userDTO.getOrganization().getId()));
+            user.setLocalities((userDTO.getLocalities() != null)
+                ? userDTO.getLocalities().stream().map(LocalityDTO::getId).map(this.localityMapper::findById).collect(Collectors.toSet())
+                : Collections.emptySet()
+            );
+            user.setServiceTypes((userDTO.getServiceTypes() != null)
+                ? userDTO.getServiceTypes().stream().map(ServiceTypeDTO::getId).map(this.serviceTypeMapper::findById).collect(Collectors.toSet())
+                : Collections.emptySet()
+            );
             return user;
         }
     }
-
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();

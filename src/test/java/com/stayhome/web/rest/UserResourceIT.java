@@ -2,9 +2,11 @@ package com.stayhome.web.rest;
 
 import com.stayhome.StayHomeApp;
 import com.stayhome.domain.Authority;
+import com.stayhome.domain.Organization;
 import com.stayhome.domain.User;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.security.AuthoritiesConstants;
+import com.stayhome.service.dto.OrganizationDTO;
 import com.stayhome.service.dto.UserDTO;
 import com.stayhome.service.mapper.UserMapper;
 import com.stayhome.web.rest.vm.ManagedUserVM;
@@ -101,6 +103,12 @@ public class UserResourceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
+        user.setPhone("98.450.650");
+        user.setCin("08100100");
+        user.setOrganization(new Organization());
+        user.getOrganization().setId(1L);
+        user.getOrganization().setName("Scout");
+
         return user;
     }
 
@@ -127,6 +135,10 @@ public class UserResourceIT {
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setCin("08555777");
+        managedUserVM.setPhone("98.566.887");
+        managedUserVM.setOrganization(new OrganizationDTO());
+        managedUserVM.getOrganization().setId(1L);
 
         restUserMockMvc.perform(post("/api/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -190,6 +202,10 @@ public class UserResourceIT {
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setCin("08654132");
+        managedUserVM.setPhone("87.987.765");
+        managedUserVM.setOrganization(new OrganizationDTO());
+        managedUserVM.getOrganization().setId(1L);
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -218,6 +234,10 @@ public class UserResourceIT {
         managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
         managedUserVM.setLangKey(DEFAULT_LANGKEY);
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setCin("08654132");
+        managedUserVM.setPhone("87.987.765");
+        managedUserVM.setOrganization(new OrganizationDTO());
+        managedUserVM.getOrganization().setId(1L);
 
         // Create the User
         restUserMockMvc.perform(post("/api/users")
@@ -302,6 +322,10 @@ public class UserResourceIT {
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setCin("08654132");
+        managedUserVM.setPhone("87.987.765");
+        managedUserVM.setOrganization(new OrganizationDTO());
+        managedUserVM.getOrganization().setId(1L);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -345,6 +369,10 @@ public class UserResourceIT {
         managedUserVM.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUserVM.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        managedUserVM.setCin("08555777");
+        managedUserVM.setPhone("98.566.887");
+        managedUserVM.setOrganization(new OrganizationDTO());
+        managedUserVM.getOrganization().setId(1L);
 
         restUserMockMvc.perform(put("/api/users")
             .contentType(MediaType.APPLICATION_JSON)
@@ -379,6 +407,12 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setPhone("55.666.999");
+        anotherUser.setCin("07200200");
+        anotherUser.setOrganization(new Organization());
+        anotherUser.getOrganization().setId(1L);
+        anotherUser.getOrganization().setName("Scout");
+
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
@@ -421,6 +455,12 @@ public class UserResourceIT {
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
+        anotherUser.setPhone("55.666.999");
+        anotherUser.setCin("07200200");
+        anotherUser.setOrganization(new Organization());
+        anotherUser.getOrganization().setId(1L);
+        anotherUser.getOrganization().setName("Scout");
+
         userRepository.saveAndFlush(anotherUser);
 
         // Update the user
@@ -483,13 +523,16 @@ public class UserResourceIT {
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(User.class);
         User user1 = new User();
-        user1.setId(1L);
+        user1.setLogin("user");
+
         User user2 = new User();
-        user2.setId(user1.getId());
+        user2.setLogin(user1.getLogin());
         assertThat(user1).isEqualTo(user2);
-        user2.setId(2L);
+
+        user2.setLogin("admin");
         assertThat(user1).isNotEqualTo(user2);
-        user1.setId(null);
+
+        user2.setLogin(null);
         assertThat(user1).isNotEqualTo(user2);
     }
 
@@ -507,6 +550,8 @@ public class UserResourceIT {
         userDTO.setCreatedBy(DEFAULT_LOGIN);
         userDTO.setLastModifiedBy(DEFAULT_LOGIN);
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setOrganization(new OrganizationDTO());
+        userDTO.getOrganization().setId(1L);
 
         User user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
