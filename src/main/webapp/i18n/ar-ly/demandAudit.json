@@ -1,0 +1,27 @@
+{
+  "stayHomeApp": {
+    "demandAudit": {
+      "home": {
+        "title": "Demand Audits",
+        "createLabel": "Create a new Demand Audit",
+        "createOrEditLabel": "Create or edit a Demand Audit",
+        "notFound": "No Demand Audits found"
+      },
+      "created": "A new Demand Audit is created with identifier {{ param }}",
+      "updated": "A Demand Audit is updated with identifier {{ param }}",
+      "deleted": "A Demand Audit is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Demand Audit {{ id }}?"
+      },
+      "detail": {
+        "title": "Demand Audit"
+      },
+      "status": "Status",
+      "description": "Description",
+      "ipAddress": "Ip Address",
+      "creationDate": "Creation Date",
+      "user": "User",
+      "demand": "Demand"
+    }
+  }
+}

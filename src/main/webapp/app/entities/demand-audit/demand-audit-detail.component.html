@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="demandAudit">
+            <h2><span jhiTranslate="stayHomeApp.demandAudit.detail.title">Demand Audit</span> {{ demandAudit.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'stayHomeApp.DemandStatus.' + demandAudit.status }}">{{ demandAudit.status }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.description">Description</span></dt>
+                <dd>
+                    <span>{{ demandAudit.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.ipAddress">Ip Address</span></dt>
+                <dd>
+                    <span>{{ demandAudit.ipAddress }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{ demandAudit.creationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.user">User</span></dt>
+                <dd>
+                    {{ demandAudit.userId }}
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demandAudit.demand">Demand</span></dt>
+                <dd>
+                    <div *ngIf="demandAudit.demandId">
+                        <a [routerLink]="['/demand', demandAudit.demandId, 'view']">{{ demandAudit.demandId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+        </div>
+    </div>
+</div>

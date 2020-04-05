@@ -1,0 +1,30 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="delegation">
+            <h2><span jhiTranslate="stayHomeApp.delegation.detail.title">Delegation</span> {{ delegation.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stayHomeApp.delegation.name">Name</span></dt>
+                <dd>
+                    <span>{{ delegation.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.delegation.governorate">Governorate</span></dt>
+                <dd>
+                    <div *ngIf="delegation.governorateId">
+                        <a [routerLink]="['/governorate', delegation.governorateId, 'view']">{{ delegation.governorateId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+        </div>
+    </div>
+</div>

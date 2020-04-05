@@ -1,0 +1,57 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="stayHomeApp.demandAudit.home.title">Demand Audits</span>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="demandAudits?.length === 0">
+        <span jhiTranslate="stayHomeApp.demandAudit.home.notFound">No demandAudits found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="demandAudits?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.status">Status</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.description">Description</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.ipAddress">Ip Address</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.creationDate">Creation Date</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.user">User</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demandAudit.demand">Demand</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let demandAudit of demandAudits ;trackBy: trackId">
+                    <td><a [routerLink]="['/demand-audit', demandAudit.id, 'view']">{{ demandAudit.id }}</a></td>
+                    <td jhiTranslate="{{ 'stayHomeApp.DemandStatus.' + demandAudit.status }}">{{ demandAudit.status }}</td>
+                    <td>{{ demandAudit.description }}</td>
+                    <td>{{ demandAudit.ipAddress }}</td>
+                    <td>{{ demandAudit.creationDate | date:'mediumDate' }}</td>
+                    <td>
+                        {{ demandAudit.userId }}
+                    </td>
+                    <td>
+                        <div *ngIf="demandAudit.demandId">
+                            <a [routerLink]="['/demand', demandAudit.demandId , 'view']" >{{ demandAudit.demandId }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/demand-audit', demandAudit.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

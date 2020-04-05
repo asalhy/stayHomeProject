@@ -1,0 +1,101 @@
+{
+    "name": "Demand",
+    "fields": [
+        {
+            "fieldName": "firstName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "DemandStatus",
+            "fieldValues": "OPEN,ASSIGNED,IN_PROCESS,DONE,REJECTED,CANCELLED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "demandAudit",
+            "otherEntityRelationshipName": "demand",
+            "relationshipName": "demandAudit"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "locality",
+            "otherEntityRelationshipName": "demand",
+            "relationshipValidateRules": "required",
+            "relationshipName": "locality",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "demand",
+            "relationshipName": "assignee",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "organization",
+            "otherEntityRelationshipName": "demand",
+            "relationshipValidateRules": "required",
+            "relationshipName": "organization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "serviceType",
+            "otherEntityRelationshipName": "demand",
+            "relationshipValidateRules": "required",
+            "relationshipName": "serviceType",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200405130700",
+    "entityTableName": "demands",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}

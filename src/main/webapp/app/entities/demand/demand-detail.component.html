@@ -1,0 +1,76 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="demand">
+            <h2><span jhiTranslate="stayHomeApp.demand.detail.title">Demand</span> {{ demand.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stayHomeApp.demand.firstName">First Name</span></dt>
+                <dd>
+                    <span>{{ demand.firstName }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.lastName">Last Name</span></dt>
+                <dd>
+                    <span>{{ demand.lastName }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.phone">Phone</span></dt>
+                <dd>
+                    <span>{{ demand.phone }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.email">Email</span></dt>
+                <dd>
+                    <span>{{ demand.email }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.description">Description</span></dt>
+                <dd>
+                    <span>{{ demand.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.status">Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'stayHomeApp.DemandStatus.' + demand.status }}">{{ demand.status }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.creationDate">Creation Date</span></dt>
+                <dd>
+                    <span>{{ demand.creationDate }}</span>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.locality">Locality</span></dt>
+                <dd>
+                    <div *ngIf="demand.localityId">
+                        <a [routerLink]="['/locality', demand.localityId, 'view']">{{ demand.localityId }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.assignee">Assignee</span></dt>
+                <dd>
+                    {{ demand.assigneeId }}
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.organization">Organization</span></dt>
+                <dd>
+                    <div *ngIf="demand.organizationId">
+                        <a [routerLink]="['/organization', demand.organizationId, 'view']">{{ demand.organizationId }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="stayHomeApp.demand.serviceType">Service Type</span></dt>
+                <dd>
+                    <div *ngIf="demand.serviceTypeId">
+                        <a [routerLink]="['/service-type', demand.serviceTypeId, 'view']">{{ demand.serviceTypeId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/demand', demand.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

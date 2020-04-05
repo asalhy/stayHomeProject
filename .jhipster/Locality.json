@@ -1,0 +1,42 @@
+{
+    "name": "Locality",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "postalCode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "delegation",
+            "otherEntityRelationshipName": "locality",
+            "relationshipValidateRules": "required",
+            "relationshipName": "delegation",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200405130400",
+    "entityTableName": "localities",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": true,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}

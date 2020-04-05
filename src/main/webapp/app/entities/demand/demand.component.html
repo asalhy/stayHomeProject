@@ -1,0 +1,95 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="stayHomeApp.demand.home.title">Demands</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-demand" [routerLink]="['/demand/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="stayHomeApp.demand.home.createLabel">
+            Create a new Demand
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="demands?.length === 0">
+        <span jhiTranslate="stayHomeApp.demand.home.notFound">No demands found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="demands?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.firstName">First Name</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.lastName">Last Name</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.phone">Phone</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.email">Email</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.description">Description</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.status">Status</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.creationDate">Creation Date</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.locality">Locality</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.assignee">Assignee</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.organization">Organization</span></th>
+                    <th scope="col" ><span jhiTranslate="stayHomeApp.demand.serviceType">Service Type</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let demand of demands ;trackBy: trackId">
+                    <td><a [routerLink]="['/demand', demand.id, 'view']">{{ demand.id }}</a></td>
+                    <td>{{ demand.firstName }}</td>
+                    <td>{{ demand.lastName }}</td>
+                    <td>{{ demand.phone }}</td>
+                    <td>{{ demand.email }}</td>
+                    <td>{{ demand.description }}</td>
+                    <td jhiTranslate="{{ 'stayHomeApp.DemandStatus.' + demand.status }}">{{ demand.status }}</td>
+                    <td>{{ demand.creationDate | date:'mediumDate' }}</td>
+                    <td>
+                        <div *ngIf="demand.localityId">
+                            <a [routerLink]="['/locality', demand.localityId , 'view']" >{{ demand.localityId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        {{ demand.assigneeId }}
+                    </td>
+                    <td>
+                        <div *ngIf="demand.organizationId">
+                            <a [routerLink]="['/organization', demand.organizationId , 'view']" >{{ demand.organizationId }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="demand.serviceTypeId">
+                            <a [routerLink]="['/service-type', demand.serviceTypeId , 'view']" >{{ demand.serviceTypeId }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/demand', demand.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/demand', demand.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(demand)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

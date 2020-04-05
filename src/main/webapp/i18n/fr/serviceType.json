@@ -1,0 +1,23 @@
+{
+  "stayHomeApp": {
+    "serviceType": {
+      "home": {
+        "title": "ServiceTypes",
+        "createLabel": "Créer un nouveau Service Type",
+        "createOrEditLabel": "Créer ou éditer un Service Type",
+        "notFound": "Aucun Service Type trouvé"
+      },
+      "created": "Un nouveau Service Type a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Service Type avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Service Type avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Service Type {{ id }} ?"
+      },
+      "detail": {
+        "title": "Service Type"
+      },
+      "name": "Name",
+      "organization": "Organization"
+    }
+  }
+}

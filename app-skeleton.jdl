@@ -1,0 +1,127 @@
+// Application
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName StayHome
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework angularX
+    clientPackageManager npm
+    clientTheme spacelab
+    clientThemeVariant dark
+    creationTimestamp 1585075174118
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    embeddableLaunchScript false
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation true
+    jhiPrefix jhi
+    jhipsterVersion "6.8.0"
+    jwtSecretKey "M2I3MDY3YWRhM2FkMmNhYzkyY2E3YWRjYmI2Nzg4MjllNjY5OTkyZjVlMmZkZjg0YjMwZmUxOWI2MThkOTk3ZmMzMmFkNWNkZGNiZGRhMmMzZWNmMjFmMmFjODU2ZmFlNmVmYTI4YjE2YzczNTNhYTk1ODU4NzQwN2VmM2ZkYmI="
+    languages [en, ar-ly, fr]
+    messageBroker false
+    nativeLanguage en
+    otherModules []
+    packageName com.stayhome
+    prodDatabaseType mysql
+    searchEngine false
+    serverPort 8080
+    serviceDiscoveryType false
+    skipClient false
+    skipServer false
+    skipUserManagement false
+    testFrameworks []
+    useSass true
+    websocket false
+  }
+
+  entities Governorate, Delegation, Locality, ServiceType, Demand, DemandAudit, Organization
+}
+
+// Entities
+entity Governorate (governorates) {
+  name String required unique
+}
+
+entity Delegation (delegations) {
+  name String required
+}
+
+entity Locality (localities) {
+  name String required,
+  postalCode String required
+}
+
+entity ServiceType (services) {
+  name String required unique
+}
+
+entity Organization (organizations) {
+  name String required unique,
+  requiresApproval Boolean required,
+  defaultPhone String required,
+  creationDate LocalDate required
+}
+
+enum DemandStatus {
+  OPEN,
+  ASSIGNED,
+  IN_PROCESS,
+  DONE,
+  REJECTED,
+  CANCELLED
+}
+
+entity Demand (demands) {
+  firstName String required,
+  lastName String required,
+  phone String required,
+  email String,
+  description String,
+  status DemandStatus required,
+  creationDate LocalDate required
+}
+
+entity DemandAudit (demand_audits) {
+  status DemandStatus required,
+  description String,
+  ipAddress String required,
+  creationDate LocalDate required
+}
+
+// Relationships
+relationship OneToMany {
+  Demand to DemandAudit{demand required}
+}
+
+relationship ManyToMany {
+  Organization{serviceTypes} to ServiceType{organization},
+  // User{localities} to Locality,
+  // User{ServiceType} to ServiceType
+}
+
+relationship ManyToOne {
+	Delegation{governorate required} to Governorate,
+	Locality{delegation required} to Delegation,
+  Demand{locality required} to Locality,
+  Demand{assignee} to User,
+  Demand{organization required} to Organization,
+  Demand{serviceType required} to ServiceType,
+  DemandAudit{user required} to User
+  // User{organization} to Organization
+}
+
+// DTO
+dto Governorate, Delegation, Locality, ServiceType, Demand, DemandAudit, Organization with mapstruct
+
+// Pagination
+// paginate Demand, Organization with pagination
+
+// Service
+service Governorate, Delegation, Locality, ServiceType, Demand, Organization with serviceClass
+
+// Readonly
+readOnly Governorate, Delegation, Locality, DemandAudit

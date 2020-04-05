@@ -1,0 +1,62 @@
+{
+    "name": "DemandAudit",
+    "fields": [
+        {
+            "fieldName": "status",
+            "fieldType": "DemandStatus",
+            "fieldValues": "OPEN,ASSIGNED,IN_PROCESS,DONE,REJECTED,CANCELLED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ipAddress",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "creationDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "demandAudit",
+            "relationshipValidateRules": "required",
+            "relationshipName": "user",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "demand",
+            "otherEntityRelationshipName": "demandAudit",
+            "relationshipValidateRules": "required",
+            "relationshipName": "demand",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200405130800",
+    "entityTableName": "demand_audits",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": true,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}

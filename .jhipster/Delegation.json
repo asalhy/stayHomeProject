@@ -1,0 +1,35 @@
+{
+    "name": "Delegation",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "governorate",
+            "otherEntityRelationshipName": "delegation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "governorate",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200405130300",
+    "entityTableName": "delegations",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": true,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": [
+        "StayHome"
+    ]
+}
