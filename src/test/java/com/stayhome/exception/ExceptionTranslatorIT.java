@@ -1,4 +1,4 @@
-package com.stayhome.web.rest.errors;
+package com.stayhome.exception;
 
 import com.stayhome.StayHomeApp;
 import org.junit.jupiter.api.Test;

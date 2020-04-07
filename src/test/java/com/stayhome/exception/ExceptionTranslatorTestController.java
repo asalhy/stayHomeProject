@@ -1,4 +1,4 @@
-package com.stayhome.web.rest.errors;
+package com.stayhome.exception;
 
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpStatus;

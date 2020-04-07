@@ -1,20 +1,14 @@
 package com.stayhome.web.rest;
 
 import com.stayhome.service.DelegationService;
-import com.stayhome.web.rest.errors.BadRequestAlertException;
 import com.stayhome.service.dto.DelegationDTO;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +33,9 @@ public class DelegationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of delegations in body.
      */
     @GetMapping("/delegations")
-    public List<DelegationDTO> getAllDelegations() {
-        log.debug("REST request to get all Delegations");
-        return delegationService.findAll();
+    public List<DelegationDTO> getAllDelegations(@RequestParam(required = false) Long governorateId) {
+        log.debug("REST request to get all Delegations, governorateId = {}", governorateId);
+        return delegationService.findAll(governorateId);
     }
 
     /**
@@ -56,4 +50,5 @@ public class DelegationResource {
         Optional<DelegationDTO> delegationDTO = delegationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(delegationDTO);
     }
+
 }

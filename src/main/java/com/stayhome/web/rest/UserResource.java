@@ -7,9 +7,9 @@ import com.stayhome.security.AuthoritiesConstants;
 import com.stayhome.service.MailService;
 import com.stayhome.service.UserService;
 import com.stayhome.service.dto.UserDTO;
-import com.stayhome.web.rest.errors.BadRequestAlertException;
-import com.stayhome.web.rest.errors.EmailAlreadyUsedException;
-import com.stayhome.web.rest.errors.LoginAlreadyUsedException;
+import com.stayhome.exception.BadRequestAlertException;
+import com.stayhome.exception.EmailAlreadyUsedException;
+import com.stayhome.exception.LoginAlreadyUsedException;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;

@@ -1,7 +1,8 @@
 package com.stayhome.web.rest;
 
+import com.stayhome.service.OrganizationService;
 import com.stayhome.service.ServiceTypeService;
-import com.stayhome.web.rest.errors.BadRequestAlertException;
+import com.stayhome.exception.BadRequestAlertException;
 import com.stayhome.service.dto.ServiceTypeDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -33,9 +34,11 @@ public class ServiceTypeResource {
     private String applicationName;
 
     private final ServiceTypeService serviceTypeService;
+    private final OrganizationService organizationService;
 
-    public ServiceTypeResource(ServiceTypeService serviceTypeService) {
+    public ServiceTypeResource(ServiceTypeService serviceTypeService, OrganizationService organizationService) {
         this.serviceTypeService = serviceTypeService;
+        this.organizationService = organizationService;
     }
 
     /**
@@ -84,9 +87,9 @@ public class ServiceTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceTypes in body.
      */
     @GetMapping("/service-types")
-    public List<ServiceTypeDTO> getAllServiceTypes() {
-        log.debug("REST request to get all ServiceTypes");
-        return serviceTypeService.findAll();
+    public List<ServiceTypeDTO> getAllServiceTypes(@RequestParam(required = false) Long organizationId) {
+        log.debug("REST request to get all ServiceTypes, organizationId = {}", organizationId);
+        return serviceTypeService.findAll(organizationId);
     }
 
     /**

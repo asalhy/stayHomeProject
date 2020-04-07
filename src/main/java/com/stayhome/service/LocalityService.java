@@ -1,9 +1,12 @@
 package com.stayhome.service;
 
+import com.stayhome.domain.Delegation;
 import com.stayhome.domain.Locality;
+import com.stayhome.repository.DelegationRepository;
 import com.stayhome.repository.LocalityRepository;
 import com.stayhome.service.dto.LocalityDTO;
 import com.stayhome.service.mapper.LocalityMapper;
+import com.stayhome.exception.DelegationNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +27,15 @@ public class LocalityService {
 
     private final Logger log = LoggerFactory.getLogger(LocalityService.class);
 
+    private final DelegationRepository delegationRepository;
     private final LocalityRepository localityRepository;
 
     private final LocalityMapper localityMapper;
 
-    public LocalityService(LocalityRepository localityRepository, LocalityMapper localityMapper) {
+    public LocalityService(LocalityRepository localityRepository, LocalityMapper localityMapper,DelegationRepository delegationRepository) {
         this.localityRepository = localityRepository;
         this.localityMapper = localityMapper;
+        this.delegationRepository = delegationRepository;
     }
 
     /**
@@ -52,9 +57,24 @@ public class LocalityService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<LocalityDTO> findAll() {
-        log.debug("Request to get all Localities");
-        return localityRepository.findAll().stream()
+    public List<LocalityDTO> findAll(Long delegationId) {
+        log.debug("Request to get all Localities, delegationId = {}", delegationId);
+
+        List<Locality> localities;
+        if(delegationId != null) {
+            Optional<Delegation> delegation = delegationRepository.findById(delegationId);
+            if (!delegation.isPresent()) {
+                throw new DelegationNotFoundException(delegationId);
+            }
+
+            localities = localityRepository.findByDelegation(delegation.get());
+        }
+        else {
+            localities = localityRepository.findAll();
+        }
+
+        return localities
+            .stream()
             .map(localityMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

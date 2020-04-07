@@ -1,8 +1,7 @@
 package com.stayhome.repository;
 
 import com.stayhome.domain.ServiceType;
-
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**

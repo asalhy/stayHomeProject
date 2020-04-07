@@ -1,4 +1,4 @@
-package com.stayhome.web.rest.errors;
+package com.stayhome.exception;
 
 public class EmailAlreadyUsedException extends BadRequestAlertException {
 

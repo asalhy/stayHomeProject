@@ -1,9 +1,12 @@
 package com.stayhome.service;
 
 import com.stayhome.domain.Delegation;
+import com.stayhome.domain.Governorate;
 import com.stayhome.repository.DelegationRepository;
+import com.stayhome.repository.GovernorateRepository;
 import com.stayhome.service.dto.DelegationDTO;
 import com.stayhome.service.mapper.DelegationMapper;
+import com.stayhome.exception.GovernorateNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +27,13 @@ public class DelegationService {
 
     private final Logger log = LoggerFactory.getLogger(DelegationService.class);
 
+    private final GovernorateRepository governorateRepository;
     private final DelegationRepository delegationRepository;
 
     private final DelegationMapper delegationMapper;
 
-    public DelegationService(DelegationRepository delegationRepository, DelegationMapper delegationMapper) {
+    public DelegationService(DelegationRepository delegationRepository, GovernorateRepository governorateRepository, DelegationMapper delegationMapper) {
+        this.governorateRepository = governorateRepository;
         this.delegationRepository = delegationRepository;
         this.delegationMapper = delegationMapper;
     }
@@ -50,11 +55,28 @@ public class DelegationService {
      * Get all the delegations.
      *
      * @return the list of entities.
+     * @param governorateId
      */
     @Transactional(readOnly = true)
-    public List<DelegationDTO> findAll() {
-        log.debug("Request to get all Delegations");
-        return delegationRepository.findAll().stream()
+    public List<DelegationDTO> findAll(Long governorateId) throws GovernorateNotFoundException {
+        log.debug("Request to get all Delegations, governorateId = {}", governorateId);
+
+        final List<Delegation> delegations;
+        if(governorateId != null) {
+            Optional<Governorate> governorate = governorateRepository.findById(governorateId);
+            if (!governorate.isPresent()) {
+                throw new GovernorateNotFoundException(governorateId);
+            }
+
+            delegations = delegationRepository.findByGovernorate(governorate.get());
+        }
+        else {
+            delegations = delegationRepository.findAll();
+        }
+
+        // FIXME - Use Mapstruct
+        return delegations
+            .stream()
             .map(delegationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

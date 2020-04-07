@@ -1,7 +1,7 @@
 package com.stayhome.web.rest;
 
 import com.stayhome.service.DemandService;
-import com.stayhome.web.rest.errors.BadRequestAlertException;
+import com.stayhome.exception.BadRequestAlertException;
 import com.stayhome.service.dto.DemandDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;

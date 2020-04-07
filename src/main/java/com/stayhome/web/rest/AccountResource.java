@@ -1,13 +1,15 @@
 package com.stayhome.web.rest;
 
 import com.stayhome.domain.User;
+import com.stayhome.exception.EmailAlreadyUsedException;
+import com.stayhome.exception.InvalidPasswordException;
+import com.stayhome.exception.LoginAlreadyUsedException;
 import com.stayhome.repository.UserRepository;
 import com.stayhome.security.SecurityUtils;
 import com.stayhome.service.MailService;
 import com.stayhome.service.UserService;
 import com.stayhome.service.dto.PasswordChangeDTO;
 import com.stayhome.service.dto.UserDTO;
-import com.stayhome.web.rest.errors.*;
 import com.stayhome.web.rest.vm.KeyAndPasswordVM;
 import com.stayhome.web.rest.vm.ManagedUserVM;
 

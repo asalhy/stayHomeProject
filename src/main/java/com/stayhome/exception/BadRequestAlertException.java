@@ -1,4 +1,4 @@
-package com.stayhome.web.rest.errors;
+package com.stayhome.exception;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

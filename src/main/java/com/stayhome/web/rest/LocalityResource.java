@@ -1,20 +1,14 @@
 package com.stayhome.web.rest;
 
 import com.stayhome.service.LocalityService;
-import com.stayhome.web.rest.errors.BadRequestAlertException;
 import com.stayhome.service.dto.LocalityDTO;
 
-import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,9 +33,9 @@ public class LocalityResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of localities in body.
      */
     @GetMapping("/localities")
-    public List<LocalityDTO> getAllLocalities() {
-        log.debug("REST request to get all Localities");
-        return localityService.findAll();
+    public List<LocalityDTO> getAllLocalities(@RequestParam(required = false) Long delegationId) {
+        log.debug("REST request to get all Localities, delegationId = {}", delegationId);
+        return localityService.findAll(delegationId);
     }
 
     /**
