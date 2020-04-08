@@ -16,9 +16,9 @@
       "detail": {
         "title": "Demand"
       },
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "phone": "Phone",
+      "firstName": "First Name *",
+      "lastName": "Last Name *",
+      "phone": "Phone *",
       "email": "Email",
       "description": "Description",
       "status": "Status",

@@ -2,6 +2,7 @@
 @import '~bootstrap/scss/functions';
 @import '~bootswatch/dist/spacelab/variables';
 @import '~bootstrap/scss/variables';
+@import '~@ng-select/ng-select/themes/default.theme.css';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -164,3 +165,23 @@ ui bootstrap tweaks
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+/* ==========================================================================
+ui project specifics
+========================================================================== */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+jhi-main,
+.content {
+  flex: 1 0 auto;
+}
+.footer {
+  flex-shrink: 0;
+}
