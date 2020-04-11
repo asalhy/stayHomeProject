@@ -5,7 +5,7 @@
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
     },
-    "gouvernorat": "Gouvernorat",
+    "gouvernorat": "Governorat",
     "delegation": "Delegation",
     "locality": "Locality"
   }

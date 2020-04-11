@@ -4,6 +4,10 @@
       "home": {
         "title": "Demands",
         "createLabel": "Create a new Demand",
+        "createSuccess": {
+          "message": "Demand sent successfully for {{firstName}} {{lastName}}\n You will be contacted at {{clientPhone}}",
+          "emergency": "For emergency please contact {{ organization }} at {{ defaultPhone }}"
+        },
         "createOrEditLabel": "Create or edit a Demand",
         "notFound": "No Demands found"
       },
@@ -16,9 +20,9 @@
       "detail": {
         "title": "Demand"
       },
-      "firstName": "First Name *",
-      "lastName": "Last Name *",
-      "phone": "Phone *",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
       "email": "Email",
       "description": "Description",
       "status": "Status",
