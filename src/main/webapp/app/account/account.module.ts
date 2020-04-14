@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { StayHomeSharedModule } from 'app/shared/shared.module';
 
@@ -13,7 +14,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
 
 @NgModule({
-  imports: [StayHomeSharedModule, RouterModule.forChild(accountState)],
+  imports: [StayHomeSharedModule, RouterModule.forChild(accountState), NgSelectModule],
   declarations: [
     ActivateComponent,
     RegisterComponent,

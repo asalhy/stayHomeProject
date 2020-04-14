@@ -5,45 +5,29 @@
                 Create or edit a User
             </h2>
 
-            <div *ngIf="user">
+            <div class="form-row" *ngIf="user">
                 <jhi-alert-error></jhi-alert-error>
 
-                <div class="form-group" [hidden]="!user.id">
-                    <label jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" name="id" formControlName="id" readonly>
+                <div class="form-group col-6">
+
+                    <!--label jhiTranslate="stayHomeApp.demand.organization">organization</label-->
+                    <ng-select id="field_organization"
+                               formControlName="organizationId"
+                               [items]="organizations"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               bindLabel="name"
+                               bindValue="id"
+                               placeholder="{{'stayHomeApp.demand.organization' | translate}}"
+                               (change)="getServiceSelect($event)">
+                    </ng-select>
+
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="userManagement.login">Login</label>
-                    <input type="text" class="form-control" name="login"
-                           formControlName="login">
-
-                    <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login')?.errors?.required"
-                               jhiTranslate="entity.validation.required">
-                            This field is required.
-                        </small>
-
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login')?.errors?.maxlength"
-                               jhiTranslate="entity.validation.maxlength"
-                               [translateValues]="{ max: 50 }">
-                            This field cannot be longer than 50 characters.
-                        </small>
-
-                        <small class="form-text text-danger"
-                               *ngIf="editForm.get('login')?.errors?.pattern"
-                               jhiTranslate="entity.validation.patternLogin">
-                            This field can only contain letters, digits and e-mail addresses.
-                        </small>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="userManagement.firstName">First Name</label>
+                <div class="form-group col-6">
+                    <!--label class="form-control-label" jhiTranslate="userManagement.firstName">First Name</label-->
                     <input type="text" class="form-control" name="firstName"
-                           formControlName="firstName">
+                           formControlName="firstName" placeholder="{{'userManagement.firstName' | translate}}">
 
                     <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
                         <small class="form-text text-danger"
@@ -55,10 +39,29 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label jhiTranslate="userManagement.lastName">Last Name</label>
+                <div class="form-group col-6">
+                    <!--label jhiTranslate="stayHomeApp.demand.serviceType">serviceType</label-->
+                    <ng-select id="field_serviceTypesForm" formControlName="serviceTypesForm"
+                               [items]="serviceTypesForm"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               [multiple]="true"
+                               bindLabel="name"
+                               placeholder="{{'stayHomeApp.demand.serviceType'| translate}}"
+                               [(ngModel)]="serviceTypes">
+                    </ng-select>
+                    <div *ngIf="editForm.get('serviceTypesForm')!.invalid && (editForm.get('serviceTypesForm')!.dirty || editForm.get('serviceTypesForm')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('serviceTypesForm')?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- jhiTranslate="userManagement.lastName">Last Name</label-->
                     <input type="text" class="form-control" name="lastName"
-                           formControlName="lastName">
+                           formControlName="lastName" placeholder="{{'userManagement.lastName'| translate}}" >
 
                     <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
                         <small class="form-text text-danger"
@@ -70,9 +73,81 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="userManagement.email">Email</label>
-                    <input type="email" class="form-control" name="email" formControlName="email">
+                <div class="form-group col-6">
+                    <!--label-- jhiTranslate="home.gouvernorat">gouvernorat</label-->
+                    <ng-select id="field-governorat" formControlName="governorateId"
+                               [items]="governorates"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               bindLabel="name"
+                               bindValue="id"
+                               placeholder="{{'home.gouvernorat'| translate}}"
+                               (change)="getDelegationSelect($event)">
+                    </ng-select>
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- class="form-control-label" jhiTranslate="userManagement.cin">CIN</label-->
+                    <input type="text" class="form-control" name="cin"
+                           formControlName="cin" placeholder="{{'userManagement.cin'| translate}}" >
+
+                    <div *ngIf="editForm.get('cin')!.invalid && (editForm.get('cin')!.dirty || editForm.get('cin')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('cin')?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength"
+                               [translateValues]="{ max: 8 }">
+                            This field cannot be longer than 8 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label jhiTranslate="home.delegation">delegation</label-->
+                    <ng-select id="field-delegation" formControlName="delegationId"
+                               [items]="delegations"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               bindLabel="name"
+                               bindValue="id"
+                               placeholder="{{'home.delegation'| translate}}"
+                               (change)="getLocalitySelect($event)">
+                    </ng-select>
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- class="form-control-label" jhiTranslate="userManagement.phone">phone</label-->
+                    <input type="number" class="form-control" name="phone"
+                           formControlName="phone" placeholder="{{'userManagement.phone'| translate}}">
+
+                    <div *ngIf="editForm.get('phone')!.invalid && (editForm.get('phone')!.dirty || editForm.get('phone')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('phone')?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength"
+                               [translateValues]="{ max: 8 }">
+                            This field cannot be longer than 8 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+
+                    <!--label-- jhiTranslate="userManagement.locality">locality</label-->
+                    <ng-select id="field_localitiesForm" formControlName="localitiesForm"
+                               [items]="localitiesList"
+                               [closeOnSelect]="true"
+                               [hideSelected]="false"
+                               [multiple]="true"
+                               bindLabel="name"
+                               placeholder="{{'userManagement.locality'| translate}}"
+                               [(ngModel)]="localities">
+                    </ng-select>
+
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- class="form-control-label" jhiTranslate="userManagement.email">Email</label-->
+                    <input type="email" class="form-control" name="email" formControlName="email"
+                           placeholder="{{'userManagement.email'| translate}}">
 
                     <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
                         <small class="form-text text-danger"
@@ -103,26 +178,73 @@
                     </div>
                 </div>
 
-                <div class="form-check">
+                <div class="form-group col-6" [hidden]="!user.id">
+                    <!--label-- jhiTranslate="global.field.id">ID</label-->
+                    <input type="text" class="form-control" name="id" formControlName="id" readonly
+                           placeholder="{{'global.field.id'| translate}}">
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label class="form-control-label" jhiTranslate="userManagement.login">Login</label-->
+                    <input type="text" class="form-control" name="login"
+                           formControlName="login" placeholder="{{'userManagement.login'| translate}}">
+
+                    <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login')?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login')?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength"
+                               [translateValues]="{ max: 50 }">
+                            This field cannot be longer than 50 characters.
+                        </small>
+
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('login')?.errors?.pattern"
+                               jhiTranslate="entity.validation.patternLogin">
+                            This field can only contain letters, digits and e-mail addresses.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- class="form-control-label" jhiTranslate="userManagement.groupScout">Group Scout</label-->
+                    <input type="text" class="form-control" name="groupName"
+                           formControlName="groupName" placeholder="{{'userManagement.groupScout'| translate}}">
+                </div>
+
+                <div class="form-group col-6">
+                    <!--label-- class="form-control-label" jhiTranslate="userManagement.scoutId">Scout ID</label-->
+                    <input type="text" class="form-control" name="membershipId"
+                           formControlName="membershipId" placeholder="{{'userManagement.scoutId'| translate}}">
+                </div>
+
+                <div class="form-group col-6" *ngIf="languages && languages.length > 0">
+                    <!--label jhiTranslate="userManagement.langKey">Lang Key</label-->
+                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey" >
+                        <!--option value="" selected>select your language</option-->
+                        <option  *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+                    </select>
+
+                </div>
+
+                <div class="form-group col-6">
+                    <label jhiTranslate="userManagement.profiles">Profiles</label>
+                    <select class="form-control" multiple name="authority" formControlName="authorities">
+                        <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
+                    </select>
+                </div>
+
+                <div class="form-check col-6">
                     <label class="form-check-label" for="activated">
                         <input class="form-check-input" [attr.disabled]="user.id === undefined ? 'disabled' : null"
                                type="checkbox" id="activated" name="activated" formControlName="activated">
                         <span jhiTranslate="userManagement.activated">Activated</span>
                     </label>
-                </div>
-
-                <div class="form-group" *ngIf="languages && languages.length > 0">
-                    <label jhiTranslate="userManagement.langKey">Lang Key</label>
-                    <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
-                        <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label jhiTranslate="userManagement.profiles">Profiles</label>
-                    <select class="form-control" multiple name="authority" formControlName="authorities">
-                        <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
-                    </select>
                 </div>
             </div>
 

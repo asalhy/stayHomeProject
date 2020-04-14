@@ -25,6 +25,13 @@
     "createdBy": "تم إنشاؤها بواسطة",
     "createdDate": "تاريخ الإنشاء",
     "lastModifiedBy": "عدل من قبل",
-    "lastModifiedDate": "تاريخ التعديل"
+    "lastModifiedDate": "تاريخ التعديل",
+    "locality": "المنطقة",
+    "organization": "المنظمة",
+    "serviceType": "نوع الخدمة",
+    "cin": "C.I.N",
+    "phone": "Phone",
+    "groupScout": "Groupe Scout",
+    "scoutId": "Scout ID"
   }
 }

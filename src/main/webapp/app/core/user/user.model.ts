@@ -1,3 +1,7 @@
+import { Organization } from 'app/shared/model/organization.model';
+import { ServiceType } from 'app/shared/model/service-type.model';
+import { Locality } from 'app/shared/model/locality.model';
+
 export interface IUser {
   id?: any;
   login?: string;
@@ -12,6 +16,13 @@ export interface IUser {
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
   password?: string;
+  organization?: Organization;
+  serviceTypes?: ServiceType[];
+  localities?: Locality[];
+  cin?: string;
+  phone?: string;
+  groupName?: string;
+  membershipId?: string;
 }
 
 export class User implements IUser {
@@ -28,6 +39,13 @@ export class User implements IUser {
     public createdDate?: Date,
     public lastModifiedBy?: string,
     public lastModifiedDate?: Date,
-    public password?: string
+    public password?: string,
+    public organization?: Organization,
+    public serviceTypes?: ServiceType[],
+    public localities?: Locality[],
+    public cin?: string,
+    public phone?: string,
+    public membershipId?: string,
+    public groupName?: string
   ) {}
 }

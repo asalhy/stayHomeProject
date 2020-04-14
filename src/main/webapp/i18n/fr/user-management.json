@@ -25,6 +25,13 @@
     "createdBy": "Créé par",
     "createdDate": "Créé le",
     "lastModifiedBy": "Modifié par",
-    "lastModifiedDate": "Modifié le"
+    "lastModifiedDate": "Modifié le",
+    "locality": "Localité",
+    "organization": "Organization",
+    "serviceType": "Type Service",
+    "cin": "C.I.N",
+    "phone": "Phone",
+    "groupScout": "Groupe Scout",
+    "scoutId": "Scout ID"
   }
 }
