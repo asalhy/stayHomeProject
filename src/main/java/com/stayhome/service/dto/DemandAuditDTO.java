@@ -3,7 +3,7 @@ package com.stayhome.service.dto;
 import com.stayhome.domain.enumeration.DemandStatus;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link com.stayhome.domain.DemandAudit} entity.
@@ -14,7 +14,7 @@ public class DemandAuditDTO implements Serializable {
     private DemandStatus status;
     private String description;
     private String ipAddress;
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
     private String user;
 
     public Long getId() {
@@ -49,11 +49,11 @@ public class DemandAuditDTO implements Serializable {
         this.ipAddress = ipAddress;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

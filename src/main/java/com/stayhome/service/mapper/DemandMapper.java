@@ -17,9 +17,7 @@ public interface DemandMapper {
     @Mapping(source = "serviceType.id", target = "serviceTypeId")
     DemandDTO toDto(Demand demand);
 
-    @Mapping(target = "demandAudits", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(source = "localityId", target = "locality")
     @Mapping(source = "organizationId", target = "organization")

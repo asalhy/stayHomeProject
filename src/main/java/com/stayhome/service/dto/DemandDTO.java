@@ -6,7 +6,7 @@ import com.stayhome.domain.enumeration.DemandStatus;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * A DTO for the {@link com.stayhome.domain.Demand} entity.
@@ -33,7 +33,7 @@ public class DemandDTO implements Serializable {
     private DemandStatus status;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     @NotNull
     private Long localityId;
@@ -103,11 +103,11 @@ public class DemandDTO implements Serializable {
         this.status = status;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

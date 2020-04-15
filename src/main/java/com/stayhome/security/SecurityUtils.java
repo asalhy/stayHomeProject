@@ -39,7 +39,6 @@ public final class SecurityUtils {
         return null;
     }
 
-
     /**
      * Get the JWT of the current user.
      *

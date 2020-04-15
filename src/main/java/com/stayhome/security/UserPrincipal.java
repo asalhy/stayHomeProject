@@ -30,9 +30,9 @@ public class UserPrincipal implements UserDetails {
     }
 
     public UserPrincipal(String username, Long organizationId, Collection<String> authorities) {
-        this.username = username;
+        this.username = Objects.requireNonNull(username);
         this.password = "";
-        this.organizationId = organizationId;
+        this.organizationId = Objects.requireNonNull(organizationId);
         this.authorities = authorities
             .stream()
             .map(SimpleGrantedAuthority::new)

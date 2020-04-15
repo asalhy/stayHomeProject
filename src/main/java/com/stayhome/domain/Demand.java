@@ -1,13 +1,14 @@
 package com.stayhome.domain;
 
 import com.stayhome.domain.enumeration.DemandStatus;
+import com.stayhome.util.IpAddressHelper;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -51,9 +52,9 @@ public class Demand implements Serializable {
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate = LocalDate.now();
+    private LocalDateTime creationDate = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "demand")
+    @OneToMany(mappedBy = "demand", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DemandAudit> demandAudits = new HashSet<>();
 
@@ -164,16 +165,16 @@ public class Demand implements Serializable {
         this.status = status;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public Demand creationDate(LocalDate creationDate) {
+    public Demand creationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
         return this;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -251,23 +252,44 @@ public class Demand implements Serializable {
 
     public void open() {
         this.status = DemandStatus.OPEN;
-        this.creationDate = LocalDate.now();
-        this.addDemandAudit(DemandAudit.createDemandAudit(this, DemandStatus.OPEN, this.getFullName()));
+        this.creationDate = LocalDateTime.now();
+        this.addDemandAudit(this.createDemandAudit(this.getFullName()));
     }
 
-    public void process() {
+    public void process(String currentUser) {
+        this.status = DemandStatus.IN_PROCESS;
+        this.addDemandAudit(this.createDemandAudit(currentUser));
     }
 
-    public void done() {
+    public void done(String currentUser) {
+        this.status = DemandStatus.DONE;
+        this.addDemandAudit(this.createDemandAudit(currentUser));
     }
 
-    public void assignTo() {
+    public void assignTo(String currentUser, User assignee) {
+        this.status = DemandStatus.ASSIGNED;
+        this.assignee = assignee;
+        this.addDemandAudit(this.createDemandAudit(currentUser));
     }
 
-    public void cancel() {
+    public void reject(String currentUser) {
+        this.status = DemandStatus.REJECTED;
+        this.addDemandAudit(this.createDemandAudit(currentUser));
     }
 
-    public void reject() {
+    private DemandAudit createDemandAudit(String user) {
+        DemandAudit audit = new DemandAudit();
+
+        audit.setId(null);
+        audit.setDemand(this);
+        audit.setCreationDate(LocalDateTime.now());
+        audit.setDescription(this.status.getDescription());
+        audit.setStatus(this.status);
+        audit.setIpAddress(IpAddressHelper.getIpAddress());
+        audit.setUser(user);
+        audit.setAssignee(this.assignee);
+
+        return audit;
     }
 
     @Override

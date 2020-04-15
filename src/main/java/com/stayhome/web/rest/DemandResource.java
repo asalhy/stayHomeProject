@@ -1,22 +1,25 @@
 package com.stayhome.web.rest;
 
-import com.stayhome.service.DemandService;
 import com.stayhome.exception.BadRequestAlertException;
+import com.stayhome.security.UserPrincipal;
+import com.stayhome.service.DemandService;
+import com.stayhome.service.dto.DemandAuditDTO;
 import com.stayhome.service.dto.DemandDTO;
-
+import com.stayhome.web.rest.vm.AssignRequestVM;
+import com.stayhome.web.rest.vm.DemandCriteriaVM;
 import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing {@link com.stayhome.domain.Demand}.
@@ -48,13 +51,42 @@ public class DemandResource {
     @PostMapping
     public ResponseEntity<DemandDTO> createDemand(@Valid @RequestBody DemandDTO demandDTO) throws URISyntaxException {
         log.debug("REST request to save Demand : {}", demandDTO);
+
         if (demandDTO.getId() != null) {
             throw new BadRequestAlertException("A new demand cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         DemandDTO result = demandService.createDemand(demandDTO);
+
         return ResponseEntity.created(new URI("/api/demands/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PutMapping("/{id}/assign")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void assignDemand(@PathVariable Long id,
+                             @Valid @RequestBody AssignRequestVM request,
+                             @AuthenticationPrincipal UserPrincipal principal) {
+        this.demandService.assignDemandTo(id, request.getAssigneeId(), principal);
+    }
+
+    @PutMapping("/{id}/reject")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void rejectDemand(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
+        this.demandService.rejectDemand(id, principal);
+    }
+
+    @PutMapping("/{id}/process")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void processDemand(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
+        this.demandService.processDemand(id, principal);
+    }
+
+    @PutMapping("/{id}/done")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void closeDemand(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
+        this.demandService.closeDemand(id, principal);
     }
 
     /**
@@ -63,9 +95,14 @@ public class DemandResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of demands in body.
      */
     @GetMapping
-    public List<DemandDTO> getAllDemands() {
+    public List<DemandDTO> getAllDemands(DemandCriteriaVM criteria, @AuthenticationPrincipal UserPrincipal principal) {
         log.debug("REST request to get all Demands");
-        return demandService.getDemands();
+
+        if (!principal.isAdministrator()) {
+            criteria.setAssignee(principal.getUsername());
+        }
+
+        return demandService.getDemands(criteria, principal);
     }
 
     /**
@@ -75,10 +112,16 @@ public class DemandResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the demandDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<DemandDTO> getDemand(@PathVariable Long id) {
+    public DemandDTO getDemand(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
         log.debug("REST request to get Demand : {}", id);
-        // FIXME - Must fetch demands by current organization
-        Optional<DemandDTO> demandDTO = demandService.getDemand(id);
-        return ResponseUtil.wrapOrNotFound(demandDTO);
+
+        return demandService.getDemand(id, principal);
+    }
+
+    @GetMapping("/{id}/audits")
+    public List<DemandAuditDTO> getAllDemandAudits(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
+        log.debug("REST request to get Demand audits : {}", id);
+
+        return this.demandService.getAudits(id, principal);
     }
 }

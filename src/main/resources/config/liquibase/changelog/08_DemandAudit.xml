@@ -25,12 +25,13 @@
             <column name="ip_address" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="creation_date" type="date">
+            <column name="creation_date" type="datetime">
                 <constraints nullable="false" />
             </column>
             <column name="user" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="assignee_id" type="bigint" />
             <column name="demand_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -41,9 +42,15 @@
     <changeSet id="08-2-relations" author="jhipster">
         <addForeignKeyConstraint baseColumnNames="demand_id"
                                  baseTableName="demand_audits"
-                                 constraintName="fk_demand_audits_demand_id"
+                                 constraintName="fk_demand_audits_demands_id"
                                  referencedColumnNames="id"
                                  referencedTableName="demands"/>
+
+        <addForeignKeyConstraint baseColumnNames="assignee_id"
+                                 baseTableName="demand_audits"
+                                 constraintName="fk_demand_audits_users_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

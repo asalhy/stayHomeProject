@@ -47,13 +47,12 @@ public class DelegationService {
         log.debug("Request to get all Delegations, governorateId = {}", governorateId);
 
         final List<Delegation> delegations;
-        if(governorateId != null) {
-            Optional<Governorate> governorate = governorateRepository.findById(governorateId);
-            if (!governorate.isPresent()) {
-                throw new GovernorateNotFoundException(governorateId);
-            }
+        if (governorateId != null) {
+            Governorate governorate = governorateRepository
+                .findById(governorateId)
+                .orElseThrow(() -> new GovernorateNotFoundException(governorateId));
 
-            delegations = delegationRepository.findByGovernorate(governorate.get());
+            delegations = delegationRepository.findByGovernorate(governorate);
         } else {
             delegations = delegationRepository.findAll();
         }

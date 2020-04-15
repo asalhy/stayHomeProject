@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -57,8 +57,7 @@ public class DemandResourceIT {
     private static final DemandStatus DEFAULT_STATUS = DemandStatus.OPEN;
     private static final DemandStatus UPDATED_STATUS = DemandStatus.ASSIGNED;
 
-    private static final LocalDate DEFAULT_CREATION_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime UPDATED_CREATION_DATE = LocalDateTime.now(ZoneId.systemDefault());
 
     @Autowired
     private DemandRepository demandRepository;
