@@ -1,20 +1,17 @@
 package com.stayhome.web.rest;
 
+import com.stayhome.exception.BadRequestAlertException;
 import com.stayhome.security.UserPrincipal;
 import com.stayhome.service.OrganizationService;
 import com.stayhome.service.ServiceTypeService;
-import com.stayhome.exception.BadRequestAlertException;
 import com.stayhome.service.dto.ServiceTypeDTO;
-
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -91,16 +88,10 @@ public class ServiceTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of serviceTypes in body.
      */
     @GetMapping("/service-types")
-    public List<ServiceTypeDTO> getAllServiceTypes(@RequestParam(required = false) Long organizationId) {
-        log.debug("REST request to get all ServiceTypes, organizationId = {}", organizationId);
+    public List<ServiceTypeDTO> getAllServiceTypes(@AuthenticationPrincipal UserPrincipal principal) {
+        log.debug("REST request to get all ServiceTypes");
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-            organizationId = principal.getOrganizationId();
-        }
-
-        return serviceTypeService.findAll(organizationId);
+        return serviceTypeService.findAll(principal.getOrganizationId());
     }
 
     /**

@@ -34,15 +34,13 @@
             <column name="status" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="creation_date" type="date">
+            <column name="creation_date" type="datetime">
                 <constraints nullable="false" />
             </column>
             <column name="locality_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="assignee_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
+            <column name="assignee_id" type="bigint" />
             <column name="organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>

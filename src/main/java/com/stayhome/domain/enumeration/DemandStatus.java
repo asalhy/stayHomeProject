@@ -10,8 +10,7 @@ public enum DemandStatus {
     ASSIGNED("ASSIGNED"),
     IN_PROCESS("IN_PROCESS"),
     DONE("DONE"),
-    REJECTED("REJECTED"),
-    CANCELLED("CANCELLED");
+    REJECTED("REJECTED");
 
     final String description;
 

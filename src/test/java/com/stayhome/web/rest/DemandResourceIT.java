@@ -7,6 +7,7 @@ import com.stayhome.domain.Organization;
 import com.stayhome.domain.ServiceType;
 import com.stayhome.domain.enumeration.DemandStatus;
 import com.stayhome.repository.DemandRepository;
+import com.stayhome.security.AuthoritiesConstants;
 import com.stayhome.service.DemandService;
 import com.stayhome.service.dto.DemandDTO;
 import com.stayhome.service.mapper.DemandMapper;
@@ -21,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -34,9 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link DemandResource} REST controller.
  */
 @SpringBootTest(classes = StayHomeApp.class)
-
 @AutoConfigureMockMvc
-@WithMockUser
+@WithUserPrincipalMockUser
 public class DemandResourceIT {
 
     private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
@@ -57,8 +57,7 @@ public class DemandResourceIT {
     private static final DemandStatus DEFAULT_STATUS = DemandStatus.OPEN;
     private static final DemandStatus UPDATED_STATUS = DemandStatus.ASSIGNED;
 
-    private static final LocalDate DEFAULT_CREATION_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATION_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime UPDATED_CREATION_DATE = LocalDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
     private DemandRepository demandRepository;
@@ -115,46 +114,6 @@ public class DemandResourceIT {
         demand.setServiceType(serviceType);
         return demand;
     }
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Demand createUpdatedEntity(EntityManager em) {
-        Demand demand = new Demand()
-            .firstName(UPDATED_FIRST_NAME)
-            .lastName(UPDATED_LAST_NAME)
-            .phone(UPDATED_PHONE)
-            .email(UPDATED_EMAIL)
-            .description(UPDATED_DESCRIPTION)
-            .status(UPDATED_STATUS)
-            .creationDate(UPDATED_CREATION_DATE);
-        // Add required entity
-        Locality locality;
-        if (TestUtil.findAll(em, Locality.class).isEmpty()) {
-            locality = LocalityResourceIT.createUpdatedEntity(em);
-            em.persist(locality);
-            em.flush();
-        } else {
-            locality = TestUtil.findAll(em, Locality.class).get(0);
-        }
-        demand.setLocality(locality);
-        // Add required entity
-        Organization organization = TestUtil.findAll(em, Organization.class).get(0);
-        demand.setOrganization(organization);
-        // Add required entity
-        ServiceType serviceType;
-        if (TestUtil.findAll(em, ServiceType.class).isEmpty()) {
-            serviceType = ServiceTypeResourceIT.createUpdatedEntity(em);
-            em.persist(serviceType);
-            em.flush();
-        } else {
-            serviceType = TestUtil.findAll(em, ServiceType.class).get(0);
-        }
-        demand.setServiceType(serviceType);
-        return demand;
-    }
 
     @BeforeEach
     public void initTest() {
@@ -183,7 +142,7 @@ public class DemandResourceIT {
         assertThat(testDemand.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testDemand.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDemand.getStatus()).isEqualTo(DEFAULT_STATUS);
-        assertThat(testDemand.getCreationDate()).isEqualTo(demand.getCreationDate());
+        assertThat(testDemand.getCreationDate()).isNotNull();
     }
 
     @Test
@@ -245,6 +204,7 @@ public class DemandResourceIT {
 
     @Test
     @Transactional
+    @WithUserPrincipalMockUser(roles = AuthoritiesConstants.ADMIN)
     public void getAllDemands() throws Exception {
         // Initialize the database
         demandRepository.saveAndFlush(demand);
@@ -260,7 +220,7 @@ public class DemandResourceIT {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(demand.getCreationDate().toString())));
+            .andExpect(jsonPath("$.[*].creationDate").isNotEmpty());
     }
 
     @Test
@@ -280,7 +240,7 @@ public class DemandResourceIT {
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
-            .andExpect(jsonPath("$.creationDate").value(demand.getCreationDate().toString()));
+            .andExpect(jsonPath("$.creationDate").isNotEmpty());
     }
 
     @Test

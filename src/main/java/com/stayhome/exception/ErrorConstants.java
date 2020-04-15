@@ -12,10 +12,12 @@ public final class ErrorConstants {
     public static final URI INVALID_PASSWORD_TYPE = URI.create(PROBLEM_BASE_URL + "/invalid-password");
     public static final URI EMAIL_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/email-already-used");
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
-    public static final URI MUNICIPALITY_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/municipality-not-found");
     public static final URI GOVERNORATE_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/governorate-not-found");
     public static final URI DELEGATION_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/delegation-not-found");
-    public static final URI ORGANIZATION_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/organization-not-found");;
+    public static final URI ORGANIZATION_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/organization-not-found");
+    public static final URI DEMAND_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/demand-not-found");
+    public static final URI USER_NOT_FOUND_TYPE = URI.create(PROBLEM_BASE_URL + "/user-not-found");
+    public static final URI ACCESS_DENIED_TYPE = URI.create(PROBLEM_BASE_URL + "/access-denied");
 
     private ErrorConstants() {
     }

@@ -46,13 +46,13 @@ public class LocalityService {
         log.debug("Request to get all Localities, delegationId = {}", delegationId);
 
         List<Locality> localities;
-        if(delegationId != null) {
-            Optional<Delegation> delegation = delegationRepository.findById(delegationId);
-            if (!delegation.isPresent()) {
-                throw new DelegationNotFoundException(delegationId);
-            }
+        if (delegationId != null) {
+            Delegation delegation = delegationRepository
+                .findById(delegationId)
+                .orElseThrow(() -> new DelegationNotFoundException(delegationId));
 
-            localities = localityRepository.findByDelegation(delegation.get());
+
+            localities = localityRepository.findByDelegation(delegation);
         } else {
             localities = localityRepository.findAll();
         }

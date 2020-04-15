@@ -6,16 +6,15 @@ import com.stayhome.repository.ServiceTypeRepository;
 import com.stayhome.service.ServiceTypeService;
 import com.stayhome.service.dto.ServiceTypeDTO;
 import com.stayhome.service.mapper.ServiceTypeMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link ServiceTypeResource} REST controller.
  */
 @SpringBootTest(classes = StayHomeApp.class)
-
+@WithUserPrincipalMockUser
 @AutoConfigureMockMvc
 public class ServiceTypeResourceIT {
 
@@ -81,7 +80,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void createServiceType() throws Exception {
         int databaseSizeBeforeCreate = serviceTypeRepository.findAll().size();
@@ -101,7 +99,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void createServiceTypeWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = serviceTypeRepository.findAll().size();
@@ -123,7 +120,6 @@ public class ServiceTypeResourceIT {
 
 
     @Test
-    @WithMockUser
     @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = serviceTypeRepository.findAll().size();
@@ -157,7 +153,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void getServiceType() throws Exception {
         // Initialize the database
@@ -172,7 +167,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void getNonExistingServiceType() throws Exception {
         // Get the serviceType
@@ -181,7 +175,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void updateServiceType() throws Exception {
         // Initialize the database
@@ -210,7 +203,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void updateNonExistingServiceType() throws Exception {
         int databaseSizeBeforeUpdate = serviceTypeRepository.findAll().size();
@@ -230,7 +222,6 @@ public class ServiceTypeResourceIT {
     }
 
     @Test
-    @WithMockUser
     @Transactional
     public void deleteServiceType() throws Exception {
         // Initialize the database

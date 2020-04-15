@@ -1,14 +1,13 @@
 package com.stayhome.domain;
 
 import com.stayhome.domain.enumeration.DemandStatus;
-import com.stayhome.util.IpAddressHelper;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -39,29 +38,19 @@ public class DemandAudit implements Serializable {
 
     @NotNull
     @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate = LocalDate.now();
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @NotNull
     @Column(name = "user", nullable = false)
     private String user;
 
+    @ManyToOne
+    @JoinColumn(name = "assignee_id", referencedColumnName = "id")
+    private User assignee;
+
     @ManyToOne(optional = false)
     @NotNull
     private Demand demand;
-
-    public static DemandAudit createDemandAudit(Demand demand, DemandStatus status, String user) {
-        DemandAudit audit = new DemandAudit();
-
-        audit.setId(null);
-        audit.setDemand(demand);
-        audit.setCreationDate(LocalDate.now());
-        audit.setDescription(status.getDescription());
-        audit.setStatus(status);
-        audit.setIpAddress(IpAddressHelper.getIpAddress());
-        audit.setUser(user);
-
-        return audit;
-    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -111,16 +100,16 @@ public class DemandAudit implements Serializable {
         this.ipAddress = ipAddress;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public DemandAudit creationDate(LocalDate creationDate) {
+    public DemandAudit creationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
         return this;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -135,6 +124,19 @@ public class DemandAudit implements Serializable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
+    public DemandAudit assignee(User assignee) {
+        this.assignee = assignee;
+        return this;
     }
 
     public Demand getDemand() {

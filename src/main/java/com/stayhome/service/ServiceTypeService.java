@@ -59,14 +59,13 @@ public class ServiceTypeService {
         log.debug("Request to get all ServiceTypes, organizationId = {}", organizationId);
 
         Collection<ServiceType> services;
-        if(organizationId != null) {
-            Optional<Organization> organization = organizationRepository.findById(organizationId);
-            if(!organization.isPresent()) {
-                throw new OrganizationNotFoundException(organizationId);
-            }
+        if (organizationId != null) {
+            Organization organization = organizationRepository
+                .findById(organizationId)
+                .orElseThrow(() -> new OrganizationNotFoundException(organizationId));
 
             // FIXME - Use graph
-            services = organization.get().getServiceTypes();
+            services = organization.getServiceTypes();
         } else {
             services = serviceTypeRepository.findAll();
         }
