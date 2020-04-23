@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select';
-
 import { StayHomeSharedModule } from 'app/shared/shared.module';
 import { UserManagementComponent } from './user-management.component';
 import { UserManagementDetailComponent } from './user-management-detail.component';
@@ -10,7 +8,7 @@ import { UserManagementDeleteDialogComponent } from './user-management-delete-di
 import { userManagementRoute } from './user-management.route';
 
 @NgModule({
-  imports: [StayHomeSharedModule, RouterModule.forChild(userManagementRoute), NgSelectModule],
+  imports: [StayHomeSharedModule, RouterModule.forChild(userManagementRoute)],
   declarations: [
     UserManagementComponent,
     UserManagementDetailComponent,
